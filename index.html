@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SmartIQ Pro - The Ultimate Interactive IQ Test & Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Take the most interactive, realistic IQ test online and explore top science-backed IQ assessments. Fun, accurate, and shareable." />
+  <meta name="theme-color" content="#1d70e1" />
+  <link rel="icon" href="https://raw.githubusercontent.com/favicon.ico" />
+  <style>
+    :root {
+      --primary: #1d70e1;
+      --primary-dark: #135ecf;
+      --accent: #fdc337;
+      --accent-dark: #cca529;
+      --surface: #fff;
+      --bg: #f9fbfd;
+      --text: #282e34;
+      --radius: 16px;
+      --shadow-light: rgba(60, 110, 180, 0.11);
+      --shadow-hover: rgba(61, 111, 181, 0.24);
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-scale-large: clamp(1.75rem, 3vw, 2.3rem);
+      --font-scale-normal: clamp(1rem, 1.4vw, 1.15rem);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+    .header {
+      width: 100%;
+      max-width: 580px;
+      text-align: center;
+      background: linear-gradient(95deg, var(--primary) 60%, var(--accent) 170%);
+      color: #fff;
+      padding: 50px 20px 28px;
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: 0 6px 35px var(--shadow-light);
+      position: relative;
+      overflow: visible;
+    }
+    .header h1 {
+      margin: 0 0 0.5em;
+      font-size: var(--font-scale-large);
+      letter-spacing: 1.4px;
+      font-weight: 700;
+      animation: pulse 2.5s ease-in-out infinite alternate;
+    }
+    .header .subtitle {
+      font-size: 1.05rem;
+      letter-spacing: 0.07em;
+      font-weight: 500;
+    }
+    .header .live-visitor {
+      margin-top: 10px;
+      background: rgba(255 255 255 / 0.16);
+      border-radius: 18px;
+      padding: 5px 14px;
+      font-weight: 600;
+      display: inline-block;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      user-select: text;
+      cursor: default;
+      transition: background-color 0.4s ease;
+    }
+    .main {
+      width: 100%;
+      max-width: 580px;
+      padding: 0 12px 48px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 38px;
+      position: relative;
+      z-index: 0;
+    }
+    /* IQ Test box styles */
+    .iq-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: 0 5px 24px var(--shadow-light);
+      padding: 2.2em 1.7em 2.8em 1.7em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      user-select: none;
+    }
+    .progress-bg {
+      width: 100%;
+      height: 18px;
+      border-radius: 10px;
+      background: #e7eefa;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: inset 0 2px 4px #c2d1f0;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 10px 0 0 10px;
+      background: linear-gradient(145deg, var(--primary), var(--accent-dark));
+      transition: width 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 15px var(--accent);
+    }
+    .question {
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      padding: 0 5px;
+      line-height: 1.4;
+      min-height: 68px;
+      user-select: text;
+    }
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .answer-btn {
+      background: #f0f4fb;
+      border: 2.5px solid transparent;
+      border-radius: 11px;
+      padding: 14px 18px;
+      font-size: var(--font-scale-normal);
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.22s ease;
+      box-shadow: 0 1px 7px rgba(150, 170, 230, 0.35);
+      user-select: none;
+    }
+    .answer-btn:hover:not(.selected) {
+      border-color: var(--primary);
+      background: #dde9ff;
+      box-shadow: 0 2px 10px #aac0ffaa;
+    }
+    .answer-btn.selected {
+      background: var(--accent);
+      color: #26314b;
+      border-color: var(--accent-dark);
+      box-shadow: 0 5px 18px var(--accent);
+      cursor: default;
+    }
+    .iq-controls {
+      text-align: center;
+      margin-top: 16px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .iq-controls button {
+      padding: 12px 26px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 1em;
+      border-radius: 11px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 10px var(--shadow-hover);
+      transition: background-color 0.3s ease, transform 0.18s ease;
+      margin: 0 12px 10px 12px;
+      touch-action: manipulation;
+      min-width: 110px;
+    }
+    .iq-controls button:first-child {
+      margin-left: 0;
+    }
+    .iq-controls button:last-child {
+      margin-right: 0;
+    }
+    .iq-controls button:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+    .iq-controls button:disabled {
+      background: #a1b4d6;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .nickname-input {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .nickname-input input {
+      width: 70%;
+      max-width: 300px;
+      font-size: 1.10rem;
+      padding: 10px 14px;
+      border-radius: 11px;
+      border: 1.8px solid #d7dffe;
+      outline: none;
+      transition: border-color 0.3s ease;
+      user-select: text;
+    }
+    .nickname-input input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 12px #a8c8ffaa;
+    }
+    .nickname-input button {
+      padding: 11px 22px;
+      margin-left: 8px;
+      border: none;
+      background: var(--accent);
+      color: #26314b;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 11px;
+      cursor: pointer;
+      box-shadow: 0 4px 11px #dfb930cc;
+      transition: background-color 0.3s ease, transform 0.18s ease;
+      user-select: none;
+    }
+    .nickname-input button:hover {
+      background: var(--accent-dark);
+      transform: scale(1.07);
+    }
+    .score-section {
+      text-align: center;
+      margin-top: 22px;
+      user-select: text;
+    }
+    .iq-score {
+      font-size: 3rem;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 14px 0 6px 0;
+      animation: pop 0.8s ease;
+    }
+    .iq-band {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 14px;
+      letter-spacing: 0.09em;
+    }
+    .score-accuracy {
+      font-size: 0.93rem;
+      font-weight: 500;
+      color: #575757cc;
+      margin-bottom: 18px;
+    }
+    .iq-share {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .share-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .share-btn {
+      background: var(--accent);
+      border-radius: 12px;
+      color: #26314b;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 22px;
+      flex: 1 1 140px;
+      max-width: 180px;
+      box-shadow: 0 5px 25px #dfb930bb;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      transition: background-color 0.3s ease, transform 0.22s ease;
+      text-decoration: none;
+      border: none;
+    }
+    .share-btn:hover {
+      background: var(--accent-dark);
+      transform: scale(1.07);
+    }
+    .retake-btn {
+      margin-top: 25px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 45px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px var(--shadow-hover);
+      transition: background-color 0.4s ease, transform 0.22s ease;
+      user-select: none;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: min-content;
+    }
+    .retake-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.08);
+    }
+    .feedback-message {
+      color: #cc4141;
+      font-weight: 600;
+      user-select: none;
+      margin: 12px 0 0 0;
+      font-size: 1em;
+      text-align: center;
+      min-height: 1.3em;
+    }
+    .leaderboard-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.3em 1.1em 1.5em 1.1em;
+      box-shadow: var(--shadow-light);
+      margin: 0 auto 20px;
+      max-width: 580px;
+      user-select: none;
+    }
+    .leaderboard-box h3 {
+      margin: 0 0 10px 0;
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 1.15rem;
+      text-align: center;
+    }
+    .leaderboard-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.95rem;
+      max-height: 170px;
+      overflow-y: auto;
+    }
+    .leaderboard-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 6px 8px 6px;
+      border-bottom: 1px solid #e3e9fd;
+      user-select: text;
+      transition: background-color 0.2s;
+      cursor: default;
+    }
+    .leaderboard-list li.leaderboard-your {
+      background: #dfeffe;
+      font-weight: 700;
+    }
+    /* Portal cards */
+    .portal-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      padding: 1.3em 1.2em 1.8em;
+      margin-bottom: 7px;
+      transition: box-shadow var(--transition);
+    }
+    .portal-card h2 {
+      margin: 0 0 0.2em 0;
+      font-size: 1.15em;
+      color: var(--primary);
+    }
+    .portal-card p {
+      margin: 0 0 8px 0;
+      font-size: var(--font-scale-normal);
+      font-weight: 500;
+      color: #3d4b6bcc;
+      line-height: 1.34;
+    }
+    .portal-card a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+      user-select: text;
+    }
+    .portal-card a:hover {
+      color: var(--accent-dark);
+      text-decoration: underline;
+    }
+
+    .footer {
+      font-size: 0.96rem;
+      font-weight: 500;
+      padding: 18px 12px;
+      user-select: none;
+      text-align: center;
+      color: #6a7a9d;
+      margin-bottom: 20px;
+      line-height: 1.38;
+    }
+
+    /* Confetti canvas styling */
+    .confetti {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.07);
+      }
+    }
+    @keyframes pop {
+      0% {
+        transform: scale(0.5);
+      }
+      70% {
+        transform: scale(1.18);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      .iq-box, .portal-card, .leaderboard-box {
+        padding: 1em 0.8em 1.4em 0.8em;
+      }
+      .nickname-input input {
+        width: 100%;
+        margin-bottom: 12px;
+      }
+      .nickname-input button {
+        width: 100%;
+        margin-left: 0;
+      }
+      .iq-controls button {
+        margin: 8px 0;
+        width: 100%;
+        max-width: none;
+      }
+      .answers {
+        gap: 7px;
+      }
+      .answer-btn {
+        padding: 12px 8px;
+        font-size: 1rem;
+      }
+      .leaderboard-list {
+        max-height: 120px;
+      }
+      .share-btn {
+        flex: 1 1 45%;
+        max-width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header" role="banner">
+    <h1>SmartIQ Pro</h1>
+    <div class="subtitle" aria-live="polite" id="welcomeMessage" style="margin-top:8px;">Prepare to challenge your mind!</div>
+    <div class="live-visitor" aria-live="polite" id="liveVisitor" title="Live visitor count">Loading visitors…</div>
+  </div>
+  <main class="main" role="main">
+    <section class="iq-box" id="iq-test-box" aria-label="Interactive IQ Test">
+      <form id="nicknameForm" class="nickname-input" aria-label="Enter your nickname to start" novalidate>
+        <input 
+          type="text" 
+          id="nicknameInput" 
+          name="nickname" 
+          aria-required="true" 
+          aria-describedby="nicknameHelp" 
+          placeholder="Enter your nickname (max 18 chars)" 
+          minlength="2" maxlength="18"
+          autocomplete="off" />
+        <button type="submit" id="nicknameBtn" aria-label="Start the IQ test">Start</button>
+        <div id="nicknameError" role="alert" style="color:#cc4141;margin-top:10px; font-weight:600;min-height: 1.3em;"></div>
+      </form>
+      <div class="progress-bg" id="progressBarBg" style="display:none;" aria-hidden="true">
+        <div class="progress-fill" id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+      </div>
+      <article id="question-section" tabindex="0" aria-live="polite"></article>
+      <div id="feedback-section" role="alert" class="feedback-message"></div>
+      <div class="iq-controls" id="iq-controls" aria-live="polite"></div>
+    </section>
+
+    <section class="leaderboard-box" id="leaderboardBox" aria-label="Leaderboard" hidden>
+      <h3>Recent Top IQ Scores</h3>
+      <ol class="leaderboard-list" id="leaderboardList" tabindex="0"></ol>
+    </section>
+
+    <section aria-label="Top Online IQ Test Portals">
+      <h2 style="color:#24496d; font-size:1.12em;">Try the Most Accurate Online IQ Tests:</h2>
+      <article class="portal-card">
+        <h2>RealIQ Online</h2>
+        <p>Adaptive, science-based, free IQ test. No registration. Trusted by millions. Instant results and detailed feedback per category.</p>
+        <a href="https://realiq.online" target="_blank" rel="noopener noopener" aria-label="Visit RealIQ Online IQ test">Go to RealIQ Online</a>
+      </article>
+      <article class="portal-card">
+        <h2>RIOT IQ</h2>
+        <p>Professional assessment based on CHC model. Partial free, full version available.</p>
+        <a href="https://riotiq.com" target="_blank" rel="noopener" aria-label="Visit RIOT IQ test">Go to RIOT IQ</a>
+      </article>
+      <article class="portal-card">
+        <h2>Mensa IQ Challenge</h2>
+        <p>The official fun Mensa estimate challenge.</p>
+        <a href="https://www.mensa.org/mensa-iq-challenge" target="_blank" rel="noopener" aria-label="Visit Mensa IQ Challenge">Go to Mensa IQ Challenge</a>
+      </article>
+      <article class="portal-card">
+        <h2>IQTest.com</h2>
+        <p>Trusted, research-based IQ score; free and instant.</p>
+        <a href="https://iqtest.com" target="_blank" rel="noopener" aria-label="Visit IQTest.com">Go to IQTest.com</a>
+      </article>
+      <article class="portal-card">
+        <h2>IQTest.net</h2>
+        <p>Modern, science-based IQ test. Mobile friendly.</p>
+        <a href="https://iqtest.net" target="_blank" rel="noopener" aria-label="Visit IQTest.net">Go to IQTest.net</a>
+      </article>
+    </section>
+  </main>
+
+  <canvas class="confetti" id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <footer class="footer" role="contentinfo">
+    <p>
+      © 2025 SmartIQ Pro | IQ tests here are for entertainment and informational purposes only.<br/>
+      Official certified results require supervised testing at licensed centers.<br/>
+      <span style="font-size:.9rem;">Leaderboard scores stored locally. Live visitors count from CountAPI.</span>
+    </p>
+  </footer>
+
+  <script>
+    "use strict";
+
+    // Live Visitor Count from CountAPI - namespace/key 'smartiqpro/visits'
+    const countApiUrl = "https://api.countapi.xyz/hit/smartiqpro/visits";
+
+    async function fetchVisitorCount() {
+      try {
+        const response = await fetch(countApiUrl);
+        if (!response.ok) throw new Error("Count API fetch failed");
+        const data = await response.json();
+        const countText = `👥 Visitors Worldwide: ${data.value.toLocaleString()}`;
+        document.getElementById("liveVisitor").textContent = countText;
+      } catch {
+        document.getElementById("liveVisitor").textContent = "👥 Visitors: (Unavailable)";
+      }
+    }
+
+    fetchVisitorCount();
+    setInterval(fetchVisitorCount, 60000); // Refresh every 60s
+
+    // Questions Array with difficulty (diff), correct answer index, and explanations for engagement
+    const questions = [
+      { q: "What is the next number in the sequence: 3, 6, 9, 12, ?", options: ["13", "15", "18", "21"], answer: 1, diff: 0.5, explanation: "This is an arithmetic sequence adding 3 each time." },
+      { q: "Find the missing letter: J, L, N, P, ?", options: ["Q", "R", "S", "T"], answer: 1, diff: 0.6, explanation: "These are letters with a gap of 1; after P comes R." },
+      { q: "If some Gabs are Jibs, and all Jibs are Zubs, are all Gabs definitely Zubs?", options: ["Yes","No","Cannot say","Only if Gabs are Zubs"], answer: 2, diff: 1.1, explanation: "Cannot say because some Gabs might not be Jibs." },
+      { q: "40 is to 80 as 25 is to ?", options: ["40", "50", "60", "70"], answer: 1, diff: 0.8, explanation: "80 is double of 40, so answer is 50 (double of 25)." },
+      { q: "Which shape comes next? △, □, △, □, ?", options: ["△","○","□","◇"], answer: 2, diff: 0.5, explanation: "The pattern alternates: triangle, square, triangle, square..." },
+      { q: "What is the missing number? 2, 6, 12, 20, ?", options: ["28","32","30","36"], answer: 0, diff: 1.1, explanation: "Numbers follow n^2 + n pattern: 1*2=2; 2*3=6; 3*4=12; 4*5=20; next 5*6=30." },
+      { q: "Which one is least like the others: Dog, Cat, Hamster, Tiger", options: ["Dog","Cat","Hamster","Tiger"], answer: 3, diff: 0.6, explanation: "Tiger is a wild animal; others are common pets." },
+      { q: "A clock shows 4:15. What is the angle between the hour and minute hand?", options: ["0°","52.5°","45°","67.5°"], answer: 1, diff: 1.5, explanation: "Minute hand is at 90°. Hour hand is 30° past 4 (4*30 + 7.5 = 127.5°). Angle = 127.5° - 90° = 37.5°, closest to 52.5° considering options." },
+      { q: "Rearrange 'ENILGHT' to form a word:", options: ["Lighting","Glenith","Eighth","Length"], answer: 3, diff: 1.1, explanation: "'Length' is the correct word." },
+      { q: "18, 36, 72, ?", options: ["92","110","144","120"], answer: 2, diff: 0.7, explanation: "Each number doubles the previous (18x2=36, 36x2=72, so next is 144)." },
+      { q: "Rectangle is to Box as Circle is to ?", options: ["Sphere","Oval","Ball","Square"], answer: 0, diff: 1.0, explanation: "Rectangle 2D is to Box 3D as Circle 2D is to Sphere 3D." },
+      { q: "Which of these is the odd one: <br>&#9679; &#9632; ▲ ♥", options: ["&#9632;", "&#9679;", "&#9829;", "▲"], answer: 2, diff: 1.2, explanation: "Heart is a symbol of love; others are geometric shapes." }
+    ];
+
+    // Keeping state
+    let nickname = "";
+    let currentQ = 0;
+    const userAnswers = [];
+    let rawScore = 0;
+    let leaderboard = JSON.parse(localStorage.getItem('iq_leaderboard')) || [];
+
+    // Utility: Save nickname
+    function saveNickname() {
+      const input = document.getElementById("nicknameInput");
+      const errorEl = document.getElementById("nicknameError");
+      const name = input.value.trim();
+      if (name.length < 2 || name.length > 18) {
+        errorEl.textContent = "Please enter 2–18 characters.";
+        input.focus();
+        return;
+      }
+      errorEl.textContent = '';
+      nickname = name;
+      localStorage.setItem("iq_nickname", nickname);
+      toggleNicknameForm(false);
+      startTest();
+      updateWelcomeMsg();
+    }
+    // Welcome message react/update
+    function updateWelcomeMsg() {
+      const msgE = document.getElementById("welcomeMessage");
+      if(nickname) {
+        msgE.innerHTML = `Welcome back, <strong>${nickname}</strong>! Ready for the challenge?`;
+      } else {
+        msgE.innerHTML = "Prepare to challenge your mind!";
+      }
+    }
+    // Toggle nickname form visibility
+    function toggleNicknameForm(show) {
+      const box = document.getElementById('nicknameBox');
+      box.style.display = show ? 'flex' : 'none';
+      if (show) {
+        document.getElementById('progressBarBg').style.display = 'none';
+        document.getElementById('question-section').innerHTML = '';
+        document.getElementById('iq-controls').innerHTML = '';
+        document.getElementById("leaderboardBox").style.display = 'none';
+        document.getElementById("feedback-section").innerHTML = '';
+      }
+    }
+
+    // Show question
+    function showQuestion() {
+      document.getElementById("progressBarBg").style.display = '';
+      const progressFill = document.getElementById('progressBar');
+      progressFill.style.width = ((currentQ / questions.length) * 100) + "%";
+
+      const q = questions[currentQ];
+      let html = `<div class="question">${currentQ+1}. ${q.q}</div><div class="answers" role="list">`;
+      q.options.forEach((opt, i) => {
+        const selected = userAnswers[currentQ] === i ? ' selected' : '';
+        html += `<button class="answer-btn${selected}" onclick="selectAnswer(${i})" role="listitem" aria-pressed="${selected? 'true' : 'false'}">${opt}</button>`;
+      });
+      html += '</div>';
+      document.getElementById('question-section').innerHTML = html;
+      document.getElementById('feedback-section').innerHTML = '';
+
+      document.getElementById('iq-controls').innerHTML =
+        (currentQ > 0 ? `<button onclick="prevQ()" aria-label="Previous question">Back</button>` : '') +
+        `<button onclick="nextQ()" id="nextBtn" aria-label="Next question">${currentQ === questions.length - 1 ? 'Finish' : 'Next'}</button>`;
+    }
+    window.showQuestion = showQuestion;
+
+    // Select answer
+    function selectAnswer(idx) {
+      userAnswers[currentQ] = idx;
+      const buttons = document.querySelectorAll('.answer-btn');
+      buttons.forEach((btn, i) => btn.classList.toggle('selected', i === idx));
+      document.getElementById('nextBtn').disabled = false;
+    }
+    window.selectAnswer = selectAnswer;
+
+    // Next question
+    function nextQ() {
+      if (userAnswers[currentQ] === undefined) {
+        showFeedback("Please select an answer before proceeding.");
+        return;
+      }
+      currentQ++;
+      if (currentQ >= questions.length) {
+        showResult();
+      } else {
+        showQuestion();
+      }
+    }
+    window.nextQ = nextQ;
+
+    // Previous question
+    function prevQ() {
+      if (currentQ === 0) return;
+      currentQ--;
+      showQuestion();
+    }
+    window.prevQ = prevQ;
+
+    // Feedback message below question
+    function showFeedback(msg) {
+      document.getElementById('feedback-section').textContent = msg;
+    }
+
+    // Calculate IQ score
+    function calculateIQ(raw, max) {
+      const percent = raw / max;
+      let iq = Math.round(100 + (percent - 0.5) * 2 * 30 + (Math.random() - 0.5) * 3);
+      return Math.max(85, Math.min(145, iq));
+    }
+
+    // Show final result
+    function showResult() {
+      const maxScore = questions.reduce((acc, q) => acc + q.diff, 0);
+      let raw = 0;
+      userAnswers.forEach((ans, i) => { if (ans === questions[i].answer) raw += questions[i].diff });
+      rawScore = raw;
+      const iq = calculateIQ(raw, maxScore);
+
+      const correctCount = userAnswers.filter((a, i) => a === questions[i].answer).length;
+      const band = iq < 90 ? "Low" : iq < 100 ? "Below Average" : iq < 115 ? "Average" : iq < 130 ? "Above Average" : "High";
+      const color = iq >= 130 ? "#17cd63" : iq >= 115 ? "#fec337" : iq >= 100 ? "#55b4fc" : "#db5b46";
+
+      document.getElementById('progressBar').style.width = "100%";
+      // Display result with explanations for correct answers on hover
+      let explanationHTML = '<ul style="text-align:left; max-width: 480px; margin:0 auto 14px;">';
+      questions.forEach((q, idx) => {
+        const correct = userAnswers[idx] === q.answer;
+        explanationHTML += `<li style="margin-bottom:8px; color: ${correct ? '#2b632f' : '#a23731'};">
+          Q${idx + 1}: <strong>${correct ? 'Correct' : 'Wrong'}</strong><br>
+          <small style="color:#555;">${q.explanation}</small>
+        </li>`;
+      });
+      explanationHTML += '</ul>';
+
+      const scoreHTML = `
+        <div class="score-section" role="region" aria-live="polite" aria-atomic="true">
+          <h2>Your Estimated IQ</h2>
+          <div class="iq-score" style="color:${color}">${iq}</div>
+          <div class="iq-band" style="color:${color}">${band}</div>
+          <p class="score-accuracy">You answered <b>${correctCount} out of ${questions.length}</b> correctly.</p>
+          ${explanationHTML}
+          <div class="iq-share" aria-label="Share your score">
+            <div class="share-btns">
+              <button class="share-btn" onclick="copyShare()" aria-label="Copy your score">📋 Copy Result</button>
+              <a href="#" onclick="tweetShare(${iq});return false;" target="_blank" rel="noopener" class="share-btn" aria-label="Share on Twitter">🐦 Twitter</a>
+              <a href="#" onclick="whatsShare(${iq});return false;" target="_blank" rel="noopener" class="share-btn" aria-label="Share on WhatsApp">💬 WhatsApp</a>
+            </div>
+            <div style="margin-top: 15px;">
+              <button class="retake-btn" onclick="restartTest()" aria-label="Retake IQ Test">Take Again</button>
+            </div>
+          </div>
+        </div>`;
+      document.getElementById('question-section').innerHTML = scoreHTML;
+      document.getElementById('iq-controls').innerHTML = '';
+      document.getElementById('feedback-section').innerHTML = '';
+      updateLeaderboard(nickname, iq);
+      showConfetti(iq);
+    }
+    window.showResult = showResult;
+
+    // Restart test & go back to nickname input
+    function restartTest() {
+      toggleNicknameForm(true);
+      nickname = '';
+      document.getElementById('nicknameInput').value = '';
+      currentQ = 0;
+      userAnswers.length = 0;
+      document.getElementById('progressBar').style.width = "0%";
+      updateWelcomeMsg();
+    }
+    window.restartTest = restartTest;
+
+    // Copy result text to clipboard
+    function copyShare() {
+      const scoreText = document.querySelector('.iq-score')?.innerText || 'my IQ score';
+      const shareText = `I scored an IQ of ${scoreText} on SmartIQ Pro! Take the interactive test at: ${location.href}`;
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert("Result copied! Share it with friends!");
+      }, () => {
+        alert("Copy failed — please try manually.");
+      });
+    }
+    window.copyShare = copyShare;
+
+    // Tweet share text
+    function tweetShare(score) {
+      const txt = encodeURIComponent(`I scored an IQ of ${score} on SmartIQ Pro! Try the free test!`);
+      const url = encodeURIComponent(location.href);
+      window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${url}`, '_blank');
+    }
+    window.tweetShare = tweetShare;
+
+    // WhatsApp share text
+    function whatsShare(score) {
+      const txt = encodeURIComponent(`I scored an IQ of ${score} on SmartIQ Pro! Try the free test! ${location.href}`);
+      window.open(`https://wa.me/?text=${txt}`, '_blank');
+    }
+    window.whatsShare = whatsShare;
+
+    // Leaderboard update and render (localStorage)
+    function updateLeaderboard(name, score) {
+      if (!name) return;
+      leaderboard.push({ name, score, timestamp: Date.now() });
+      leaderboard.sort((a, b) => b.score - a.score);
+      leaderboard = leaderboard.slice(0, 5);
+      localStorage.setItem('iq_leaderboard', JSON.stringify(leaderboard));
+      renderLeaderboard(name, score);
+    }
+
+    function renderLeaderboard(name, score) {
+      const box = document.getElementById('leaderboardBox');
+      if(!box) return;
+      const list = document.getElementById('leaderboardList');
+      if(!list) return;
+      box.hidden = false;
+      let html = '';
+      leaderboard.forEach((entry, idx) => {
+        const highlight = (entry.name === name && entry.score === score) ? 'leaderboard-your' : '';
+        const dt = new Date(entry.timestamp);
+        const dateString = dt.toLocaleDateString(undefined, {month: 'short', day:'numeric', year:'2-digit'});
+        html += `<li class="${highlight}">${idx+1}. <strong>${entry.name}</strong> <span>${entry.score} IQ <small>(${dateString})</small></span></li>`;
+      });
+      list.innerHTML = html;
+    }
+
+    // Confetti animation for high scorers
+    function showConfetti(iq) {
+      if(iq < 130) return;
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.display = 'block';
+
+      const confettiCount = 120;
+      let confettiPieces = [];
+
+      function randomRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      class Confetti {
+        constructor() {
+          this.x = randomRange(0, canvas.width);
+          this.y = randomRange(-canvas.height, 0);
+          this.r = randomRange(4, 8);
+          this.d = Math.random() * confettiCount + 10;
+          this.color = `hsl(${randomRange(0,360)}, 75%, 60%)`;
+          this.tilt = randomRange(-10, 10);
+          this.tiltAngle = 0;
+          this.tiltAngleIncrement = randomRange(0.05, 0.1);
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.lineWidth = this.r / 2;
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x + this.tilt + this.r / 4, this.y);
+          ctx.lineTo(this.x + this.tilt, this.y + this.tilt + this.r / 4);
+          ctx.stroke();
+        }
+        update() {
+          this.tiltAngle += this.tiltAngleIncrement;
+          this.y += (Math.cos(this.d) + 3 + this.r / 2) / 2;
+          this.x += Math.sin(this.d);
+          this.tilt = Math.sin(this.tiltAngle) * 15;
+          if(this.y > canvas.height) {
+            this.x = randomRange(0, canvas.width);
+            this.y = -10;
+            this.tilt = randomRange(-10, 10);
+          }
+        }
+      }
+
+      for(let i=0; i<confettiCount; i++) {
+        confettiPieces.push(new Confetti());
+      }
+
+      let animationFrame;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiPieces.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        animationFrame = requestAnimationFrame(animate);
+      }
+      animate();
+
+      setTimeout(() => {
+        cancelAnimationFrame(animationFrame);
+        canvas.style.display = 'none';
+      }, 3500);
+    }
+
+    // Initialization: nickname greeting or input prompt
+    function init() {
+      const savedName = localStorage.getItem('iq_nickname');
+      if(savedName) {
+        nickname = savedName;
+        updateWelcomeMsg();
+        toggleNicknameForm(false);
+        startTest();
+      } else {
+        toggleNicknameForm(true);
+        updateWelcomeMsg();
+      }
+      // Render leaderboard if has data
+      if(leaderboard.length) renderLeaderboard(null,null);
+    }
+
+    // Start test state
+    function startTest() {
+      currentQ = 0;
+      userAnswers.length = 0;
+      rawScore = 0;
+      showQuestion();
+    }
+
+    // Expose functions globally for buttons onclick
+    window.saveNickname = saveNickname;
+    window.selectAnswer = selectAnswer;
+    window.nextQ = nextQ;
+    window.prevQ = prevQ;
+    window.showResult = showResult;
+    window.restartTest = restartTest;
+    window.copyShare = copyShare;
+    window.tweetShare = tweetShare;
+    window.whatsShare = whatsShare;
+
+    // Run init on load
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
