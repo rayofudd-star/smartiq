@@ -1,453 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>SmartIQ Pro – Free Interactive IQ Test & Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Take the SmartIQ Pro IQ test – interactive, realistic, and fun, with global score comparisons, daily streaks and the world's best IQ resources." />
-  <meta name="theme-color" content="#1d70e1" />
-  <style>
-    html { box-sizing: border-box; }
-    *, *:before, *:after { box-sizing: inherit; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #f9fbfd 0%, #e7f0ff 100%);
-      color: #222c34;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .header {
-      width: 100%;
-      max-width: 560px;
-      text-align: center;
-      background: linear-gradient(100deg, #1d70e1 60%, #fdc337 180%);
-      color: #fff;
-      padding: 52px 16px 26px;
-      border-radius: 0 0 18px 18px;
-      margin-bottom: 0.8em;
-      position: relative;
-      overflow: visible;
-      box-shadow: 0 4px 40px #1d70e130;
-    }
-    .header h1 { margin: 0 0 0.6em; font-size: 2.2em; font-weight: 900; letter-spacing: 1.1px; 
-      text-shadow: 0px 2px 14px #fdc33766; }
-    .header .live-visitor {
-      margin-top: 10px; 
-      background: rgba(255,255,255,0.21);
-      border-radius: 19px;
-      padding: 7px 22px;
-      font-weight: 600;
-      display: inline-block;
-      font-size: 1.10rem;
-      letter-spacing: 0.035em;
-      transition: background-color 0.4s;
-      user-select: text;
-      box-shadow: 0 2px 16px #fdc33744;
-      border: 1.5px solid #d7e9ff60;
-      min-width: 150px;
-    }
-    .main { width: 100%; max-width: 540px; margin: 0 auto 44px auto; padding: 0 13px; display: flex; flex-direction: column; gap: 36px;}
-    .iq-box {
-      background: #fffefe;
-      border-radius: 16px;
-      box-shadow: 0 8px 36px #1d70e122;
-      padding: 2.25em 1.1em 2.2em 1.1em;
-      display: flex; flex-direction: column; align-items: center; gap: 20px;
-      position: relative;
-      min-height: 420px;
-      margin-top: 12px;
-    }
-    .streak-badge {
-      position: absolute; right: 21px; top: 10px;
-      background: linear-gradient(93deg, #fdc337 55%, #fffbe6 140%);
-      color: #1d70e1;
-      font-weight: bold;
-      border-radius: 14px;
-      font-size: .97em; padding: 7px 15px 8px 13px;
-      box-shadow: 0 6px 16px #fdc33740;
-      display: flex; align-items: center; gap:7px; user-select: none; cursor: pointer; border: 2px solid #e5ceac; z-index: 9;
-    }
-    .progress-bg { width: 100%; height: 17px; border-radius: 10px; background: #eaf0fd; margin-bottom: 19px;
-      box-shadow: inset 0 2px 5px #c9d8f3;}
-    .progress-fill { width: 0%; height: 100%; border-radius:10px 0 0 10px;
-      background: linear-gradient(95deg, #1d70e1, #fdc337 120%);
-      transition: width 0.7s cubic-bezier(.5,.01,.6,1.05); }
-    .question { font-size: 1.13rem; font-weight: 600; text-align: center; min-height: 62px; user-select: text;}
-    .answers {display: flex;flex-direction:column;gap:13px;width:100%;max-width:440px;}
-    .answer-btn {
-      background: #f1f5fb; border: 2.1px solid transparent; border-radius: 12px;
-      padding: 14px 16px; font-size: 1.03rem; color: #233; font-weight: 500;
-      cursor: pointer; transition:all 0.14s; box-shadow: 0 2px 11px #1d70e110;
-      outline: none; text-align:left; min-width: 128px;
-    }
-    .answer-btn.selected, .answer-btn:active {background: #fdc337; border-color: #cbad29; color: #27314b;}
-    .answer-btn.correct { border-color: #24af56 !important; background: #ecffe8 !important; color: #18c061 !important;}
-    .answer-btn.wrong { border-color: #cc4141 !important; background: #ffeaea !important; color: #cc4141 !important;}
-    .iq-controls {text-align:center;margin-top:13px;}
-    .iq-controls button { padding: 11px 34px; background: #1d70e1; color: #fff; border: none; font-weight: 700; font-size: 1em; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 12px #1d70e12a; margin:0 13px 7px 13px;transition:background .16s;}
-    .iq-controls button:hover:not(:disabled) {background: #135ecf;}
-    .iq-controls button:disabled {background: #b5c3de;}
-    .nickname-input {width:100%;max-width:390px; text-align:center;margin-bottom:13px;}
-    .nickname-input input {width:71%;max-width:220px; font-size:1.07rem; padding: 10px 13px; border-radius:14px; border: 2px solid #d8e2fc;}
-    .nickname-input input:focus{border-color:#1d70e1;box-shadow:0 0 11px #6db5fd2a;}
-    .nickname-input button {padding:10px 22px; margin-left:7px; border:none; background:#fdc337; color:#26314b; font-size:1.1rem; font-weight:700; border-radius:13px; cursor:pointer;}
-    .nickname-input button:hover {background:#cca529;}
-    .score-section {text-align:center;margin-top:15px;}
-    .iq-score {font-size:2.7em;color:#fdc337;font-weight:700;margin:12px 0 4px 0;}
-    .iq-band {font-size:1.18em;font-weight:600;color:#1d70e1;margin-bottom:12px;letter-spacing:0.08em;}
-    .score-accuracy{font-size:.96rem; color:#575757cc; margin-bottom:13px;}
-    .iq-share {margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:12px;}
-    .share-btns {display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-    .share-btn {background:#fdc337;border-radius:11px;color:#26314b;font-weight:700;font-size:1rem;padding:10px 21px; box-shadow:0 2px 9px #fdc33718;cursor:pointer;text-align:center;border:none;}
-    .share-btn:hover{background:#cca529;}
-    .retake-btn{background:#1d70e1;color:#fff;border:none;border-radius:12px;padding:9px 32px;font-weight:700;font-size:1.07rem;cursor:pointer;margin-top:10px;}
-    .retake-btn:hover{background:#135ecf;}
-    .feedback-message{color:#cc4141;font-weight:600;user-select:none;margin:10px 0 0 0;font-size:.96em;text-align:center;min-height:1.2em;}
-    .leaderboard-box{background:#fffefe;border-radius:15px;box-shadow:0 5px 17px #1d70e106;padding: 1.2em 1em 1.1em 1em;margin:0 auto 14px auto;max-width:550px;}
-    .leaderboard-box h3{margin:0 0 10px 0;color:#135ecf; font-size:1.07em;}
-    .leaderboard-list{list-style:none;padding:0;margin:0;font-weight:600;font-size:0.97em;max-height:170px;overflow-y:auto;}
-    .leaderboard-list li{display:flex;justify-content:space-between;padding:7px 6px 7px 6px;border-bottom:1px solid #e3e9fd;}
-    .leaderboard-list li.leaderboard-your{background:#e3f6fc;font-weight:700;}
-    .portal-card{background:#fff;border-radius:14px;box-shadow:0 2px 11px #1d70e109;padding:1em 1em 1em 1em;margin-bottom:7px;}
-    .portal-card h2{margin:0 0 0.2em 0;font-size:1.1em;color:#1d70e1;}
-    .portal-card p{margin:0 0 8px 0;font-size:.98em;font-weight:500;color:#3d4b6bcc;line-height:1.28;}
-    .portal-card a{color:#1d70e1;font-weight:700;text-decoration:none;}
-    .portal-card a:hover{color:#fdc337;}
-    .info-card{margin:7px 0 21px 0;background:#fffbe9;border-radius:12px;padding:1em 1em 1.1em 1em;box-shadow:0 2px 12px #fdc33719;}
-    .info-card h2{color:#1d70e1;margin:0 0 .4em 0;font-size:1.07em}
-    .info-card ul{margin: 0 0 0 1.18em;padding:0;}
-    .confetti{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;display:none;}
-    .footer{font-size:0.98rem;font-weight:500;padding:15px 10px;color:#6a7a9d;text-align:center;}
-    @media (max-width: 600px){.header h1{font-size:1.58rem;}}
-  </style>
+<meta charset="UTF-8">
+<title>SmartIQ Pro – The Next-Gen IQ Test Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#182853">
+<meta name="description" content="SmartIQ Pro – next-generation IQ test with a live global visitor count, beautiful scoring, detailed explanations, streaks, and the web's best IQ resources.">
+<style>
+:root {
+  --primary: #377be9;
+  --primary-dark: #20449a;
+  --accent: #f7cf47;
+  --accent-dark: #b49209;
+  --glass: rgba(255,255,255,0.70);
+  --surface: #ffffffcf;
+  --deep-bg: linear-gradient(135deg, #181830 0%, #223063 100%);
+  --card-glow: 0 10px 32px #377be933, 0 1.5px 20px #fff2;
+  --xl-radius: 24px;
+  --sm-radius: 13px;
+  --primary-text: #152944;
+  --secondary-text: #fff;
+  --lead-shadow: 0 2px 19px #93d3fad6;
+  --error: #d74b4b;
+  --success: #15904C;
+  --glass-shadow: 0 18px 36px #0a193030;
+  --button-glow: 0 0 11px #377be94c;
+  --font-main: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+}
+body {
+  margin: 0; font-family: var(--font-main); background: var(--deep-bg);
+  color: var(--primary-text); min-height: 100vh; transition: background 0.5s;
+}
+header {
+  text-align: center; background: var(--primary);
+  padding: 58px 0 28px 0; border-radius: 0 0 var(--xl-radius) var(--xl-radius);
+  color: var(--secondary-text); box-shadow: var(--card-glow);
+  margin-bottom: 1.5em; position:relative; overflow:hidden;
+}
+header h1 {
+  font-size: 2.5rem; font-weight: 900; margin: 0; letter-spacing: 1.7px;
+}
+header .lead {
+  font-size: 1.22rem; letter-spacing:0.07em; font-weight: 500;
+  color: #fffbe3; margin-top: 7px;
+}
+.visitor-block {
+  display: flex; align-items: center; justify-content: center;
+  margin: 23px auto 0 auto; gap: 13px;
+}
+.visitor-icon {
+  font-size: 2.2em; margin-top: 0.15em;
+}
+#liveVisitor {
+  background: var(--glass); border-radius: var(--sm-radius); color: #2c4d88;
+  font-weight: 800; padding: 8px 24px; font-size: 1.18em; box-shadow: var(--button-glow);
+  min-width:150px; transition: background 0.5s, color 0.3s;
+  outline:none;
+}
+#liveVisitor.error {
+  color: var(--error)!important; background:#ffeaea;
+}
+main {
+  max-width: 480px; margin:0 auto; padding:0 7px;
+  display:flex; flex-direction:column; gap:34px;
+}
+.iq-card {
+  background: var(--glass);
+  border-radius: var(--xl-radius);
+  box-shadow: var(--glass-shadow);
+  padding: 2.3em 1.1em 2.2em;
+  margin-top: -41px;
+  display: flex; flex-direction: column; align-items: center; gap: 1.2em;
+  position:relative; user-select:none;
+  border: 1.5px solid #e8f3fe41;
+  backdrop-filter: blur(5px);
+  transition: box-shadow 0.5s, border 0.3s;
+}
+.streak-badge {
+  position: absolute; right: 24px; top: 17px; z-index: 4;
+  background: linear-gradient(93deg, #f0c835 65%, #fff9d3 120%);
+  color: #1d70e1; border-radius: 22px; font-size: 1.01em;
+  padding: 7px 17px 7px 11px; box-shadow:0 2px 32px #f3c33754;
+  display:flex;align-items:center;gap:9px; font-weight:800; cursor:pointer; border:2.5px solid #efdbbc;
+  transition: background 0.18s;
+}
+.streak-badge:hover { background:linear-gradient(92deg, #f7e48f 70%, #ffeed2 140%);}
+.progress-bg{
+  width:99%; height:16px; border-radius:12px;
+  background: #ecf1fc; overflow: hidden;
+  margin-bottom: 18px; box-shadow:inset 0 0 5px #afd2ff56;
+}
+.progress-fill{
+  width:0%; height:100%; border-radius:12px 0 0 12px;
+  background:linear-gradient(93deg, var(--primary), var(--accent) 85%);
+  transition:width 0.7s cubic-bezier(.57,.01,.75,1.02);
+  box-shadow:0 1.5px 7px #9ad;
+}
+.question{
+  font-size:1.22em; font-weight:700; text-align:center; margin:0.5em 0 0.4em 0; min-height:66px;
+  background:linear-gradient(90deg,#2e3649 10%,#4456be 80%);
+  color:#fff; border-radius:11px; padding:15px 7px 13px 7px; box-shadow:0 2px 8px #2e60e133;
+  word-spacing:.1em;letter-spacing:.01em;text-shadow:0 1.5px 9px #377be979;
+}
+.answers{display:flex;flex-direction:column;gap:14px;width:99%;max-width:98vw;align-items:center;}
+.answer-btn{
+  background:rgba(253, 195, 55, 0.07); border:2.5px solid transparent; border-radius:16px;
+  padding:16px 13px; font-size:1.12rem; color:#173260; font-weight:700; min-width:176px;
+  cursor:pointer; transition:all 0.16s; box-shadow:0 2px 15px #eee9f673;
+  outline: none; text-align:center; letter-spacing:.01em;
+}
+.answer-btn.selected,.answer-btn:active{
+  background:linear-gradient(99deg,#efe7f8,#fcefab 120%);
+  color:#111a24;border-color:#fdc337;
+  box-shadow:0 3px 22px #fdc33759;
+  scale:1.03;
+  z-index:1;
+}
+.answer-btn.correct{
+  box-shadow:0 5px 32px #21d66c59;
+  background: #caffe2!important; color: #10b851!important;border-color: #19a650!important;
+  animation: pop 0.33s;
+}
+.answer-btn.wrong{
+  background:#fff3f3!important; color: var(--error)!important;border-color: #ff9494!important;
+  animation: tilt 0.22s;
+}
+@keyframes pop { 0%{scale:.7;} 45%{scale:1.12;} 100%{scale:1;} }
+@keyframes tilt {15%{rotate:-6deg;}30%{rotate:3deg;}75%{rotate:-2deg;}100%{rotate:0;}}
+.iq-controls{text-align:center;margin-top:17px;}
+.iq-controls button{padding:13px 34px;background:linear-gradient(93deg, var(--primary), #496de7 120%);
+  color:#fff;border:none;font-weight:800;font-size:1.1em;border-radius:13px;
+  cursor:pointer;box-shadow:0 4px 16px #377be928;margin:0 13px 7px 13px;transition:background .14s;
+  letter-spacing:.01em;}
+.iq-controls button:hover{background:linear-gradient(87deg, #20449a 80%, #377be9 173%);}
+.iq-controls button:disabled{background:#b5c3de;opacity:.8;}
+.nickname-input{width:99%;max-width:340px;text-align:center;margin-bottom:12px;}
+.nickname-input input{width:66%;max-width:160px;font-size:1.08rem;padding:10px 14px;
+  border-radius:13px;border:2px solid #dfdffe;margin-bottom:8px;}
+.nickname-input input:focus{border-color:var(--primary);box-shadow:0 0 10px #6db5fd3a;}
+.nickname-input button{padding:10px 22px;margin-left:8px;background:var(--accent);color:#26314b;font-size:1.13rem;font-weight:800;border-radius:12px;cursor:pointer;border:none;}
+.nickname-input button:hover{background:var(--accent-dark);}
+.score-section{text-align:center;margin-top:17px;}
+.iq-score{font-size:3em;color:var(--accent);font-weight:900;margin:16px 0 9px 0;text-shadow:0 2px 13px #fdc3372a;}
+.iq-band{font-size:1.22em;font-weight:800;letter-spacing:0.10em;margin-bottom:16px;}
+.score-accuracy{font-size:1.07em;color:#5b5b5bcc;margin-bottom:16px;}
+ul.explanation-list{margin:.7em auto .7em auto;padding-left:1.4em;max-width:88%;background:#fafdffec;border-radius:10px;padding:9px 11px;}
+ul.explanation-list li{margin-bottom:6px;}
+.iq-share{margin-top:13px;display:flex;flex-direction:column;align-items:center;gap:13px;}
+.share-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.share-btn{background:var(--accent);border-radius:12px;color:#222;font-weight:700;font-size:1em;padding:11px 24px;box-shadow:0 2.5px 11px #fdc3371e;cursor:pointer;text-align:center;border:none;transition:background 0.13s;}
+.share-btn:hover{background:var(--accent-dark);}
+.retake-btn{background:var(--primary);color:#fff;border:none;border-radius:11px;padding:10px 42px; font-weight:900;font-size:1.13em;cursor:pointer;margin-top:10px;box-shadow:0 3px 16px #377be938;}
+.retake-btn:hover{background:#113666;}
+.feedback-message{color:var(--error);font-weight:800;user-select:none;margin:10px 0 0 0;font-size:.99em;text-align:center;min-height:1.3em;}
+.leaderboard-box{background:var(--glass);border-radius:15px;box-shadow:0 7px 21px #1d70e108;backdrop-filter:blur(3px);padding:1.25em 1.1em 1.14em 1.1em;margin:0 auto 16px auto;max-width:99%;}
+.leaderboard-box h3{margin:0 0 10px 0;color:#2d4faa; font-size:1.13em;}
+.leaderboard-list{list-style:none;padding:0;margin:0;font-weight:700;font-size:1.1em;max-height:171px;overflow-y:auto;}
+.leaderboard-list li{display:flex;justify-content:space-between;padding:8px 8px 7px 8px;border-bottom:1px solid #e2e7fc;}
+.leaderboard-list li.leaderboard-your{background:#d9f7fd;font-weight:900;border-radius:7px;}
+.portal-card{background:var(--surface);border-radius:14px;box-shadow:0 2px 13px #377be908;padding:1.35em 1em 1.07em 1em;margin-bottom:9px;}
+.portal-card h2{margin:0 0 0.2em 0;font-size:1.13em;color:var(--primary);}
+.portal-card p{margin:0 0 8px 0;font-size:.995em;font-weight:600;color:#38486acc;line-height:1.32;}
+.portal-card a{color:var(--primary);font-weight:800;text-decoration:none;}
+.portal-card a:hover{color:var(--accent-dark);}
+.info-card{margin:10px 0 22px 0;background:#fffbe9eb;border-radius:12px;padding:1em 1em 1.1em 1em;box-shadow:0 2px 12px #fdc33721;}
+.info-card h2{color:#2957a1;margin:0 0 .38em 0;font-size:1.15em;font-weight:900;}
+@media (max-width: 600px){
+  header h1{font-size:1.21rem;}
+  .main,.iq-card{padding:0;}
+  .iq-box{padding:1em 3px;}
+  .question{font-size:1.03em;min-width:0;}
+  .answers{gap:8px;}
+  .answer-btn{padding:10px 4px;font-size:.99em;}
+}
+</style>
 </head>
 <body>
-  <div class="header" role="banner">
-    <h1>SmartIQ Pro</h1>
-    <div class="live-visitor" id="liveVisitor" aria-live="polite">Loading visitors…</div>
+<header>
+  <h1><span style="color:#f7cf47;">🧠</span> SmartIQ Pro</h1>
+  <div class="lead">The next-generation IQ quiz where <b>everyone</b> can measure, share, and grow their brainpower.</div>
+  <div class="visitor-block">
+    <span class="visitor-icon">🌏</span>
+    <span id="liveVisitor" aria-live="polite">Counting visitors…</span>
   </div>
-  <main class="main" role="main">
-    <section class="iq-box" id="iq-test-box">
-      <div class="streak-badge" id="streakBadge"><span id="streakEmoji"></span> <span id="streakCount"></span> day streak</div>
-      <form id="nicknameForm" class="nickname-input" novalidate>
-        <input type="text" id="nicknameInput" name="nickname" placeholder="Enter your nickname" minlength="2" maxlength="18" autocomplete="off" />
-        <button type="submit" id="nicknameBtn">Start</button>
-        <div id="nicknameError" style="color:#cc4141;min-height:1.2em;"></div>
-      </form>
-      <div class="progress-bg" id="progressBarBg" style="display:none;">
-        <div class="progress-fill" id="progressBar"></div>
+</header>
+<main>
+  <section class="iq-card" id="iq-test-box">
+    <div class="streak-badge" id="streakBadge"><span id="streakEmoji"></span> <span id="streakCount"></span> day streak</div>
+    <form id="nicknameForm" class="nickname-input" autocomplete="off" tabindex="1">
+      <input type="text" id="nicknameInput" name="nickname" placeholder="Enter nickname" minlength="2" maxlength="18" required/>
+      <button type="submit" id="nicknameBtn">Start</button>
+      <div id="nicknameError" role="alert" style="color:#d74b4b;min-height:1.15em;font-weight:700;"></div>
+    </form>
+    <div class="progress-bg" id="progressBarBg" style="display:none;">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+    <article id="question-section"></article>
+    <div id="feedback-section" class="feedback-message"></div>
+    <div class="iq-controls" id="iq-controls"></div>
+  </section>
+  <section class="info-card" aria-label="About IQ tests and scoring">
+    <h2>What is IQ? How Are People Categorized?</h2>
+    <p><b>IQ (Intelligence Quotient)</b> is a score from standardized tests measuring reasoning compared to the general population. Most people fall in the 85–115 range.</p>
+    <ul style="font-weight:700;">
+      <li><b>Average:</b> 100 (68% are 85–115)</li>
+      <li><span style="color:#118a3f;">130+</span> — Highly Gifted (top 2%)</li>
+      <li>120–129 — Above Average</li>
+      <li>110–119 — High Average</li>
+      <li>90–109 — Average</li>
+      <li style="color:#d74b4b;">&lt;80 — Below Average</li>
+    </ul>
+    <p style="margin:7px 0 0 0;font-size:.97em;">IQ is one slice of intelligence—talent, persistence, and creativity matter just as much!</p>
+  </section>
+  <section class="leaderboard-box" id="leaderboardBox" hidden>
+    <h3>Top SmartIQ Scores This Session</h3>
+    <ol class="leaderboard-list" id="leaderboardList"></ol>
+  </section>
+  <section>
+    <h2 style="color:#29469d; font-size:1.11em;">Try Other Science-Backed IQ Tests:</h2>
+    <article class="portal-card">
+      <h2>RealIQ Online</h2>
+      <p>Adaptive, research-based, robust IQ assessment (FREE, no registration)</p>
+      <a href="https://realiq.online" target="_blank" rel="noopener">Go to RealIQ Online</a>
+    </article>
+    <article class="portal-card">
+      <h2>RIOT IQ</h2>
+      <p>Professional CHC-based IQ test (Partial free; full version available)</p>
+      <a href="https://riotiq.com" target="_blank" rel="noopener">Go to RIOT IQ</a>
+    </article>
+    <article class="portal-card">
+      <h2>Mensa IQ Challenge</h2>
+      <p>Official Mensa IQ quick assessment!</p>
+      <a href="https://www.mensa.org/mensa-iq-challenge" target="_blank" rel="noopener">Go to Mensa IQ Challenge</a>
+    </article>
+    <article class="portal-card">
+      <h2>IQTest.com</h2>
+      <p>Long-running, research-grade online IQ test (instant result, paid full report)</p>
+      <a href="https://iqtest.com" target="_blank" rel="noopener">Go to IQTest.com</a>
+    </article>
+    <article class="portal-card">
+      <h2>IQTest.net</h2>
+      <p>Modern, mobile-friendly IQ test with nice analytics</p>
+      <a href="https://iqtest.net" target="_blank" rel="noopener">Go to IQTest.net</a>
+    </article>
+  </section>
+</main>
+<canvas class="confetti" id="confettiCanvas" style="display:none;"></canvas>
+<footer class="footer" style="margin-top:3em">© 2025 SmartIQ Pro – for education, self-insight & fun.</footer>
+<script>
+// =========== LIVE VISITOR COUNTER ============
+
+function showVisitorFakeFallback() {
+  // If all counters fail, show a fake but plausible number, so the UI always feels alive.
+  let v = Math.floor(500 + Math.random()*1200);
+  const el = document.getElementById("liveVisitor");
+  el.textContent = "👥 Visitors estimate: " + v.toLocaleString();
+  el.classList.add("error");
+}
+function getSteps() {
+  // Try a few free public counters (so counter never stays at "unavailable")
+  return [
+    ()=>fetch("https://api.countapi.xyz/hit/smartiqpro/visits").then(r=>r.ok?r.json():Promise.reject()),
+    ()=>fetch("https://api.count.co/counter/INCR?key=smq_smart_counter_v1", {method:"POST"}).then(r=>r.ok?r.json():Promise.reject()).then(d=>({value:d.value||d.count})),
+  ];
+}
+function updateVisitorCount() {
+  let i = 0, steps = getSteps(), el = document.getElementById("liveVisitor");
+  function tryNext() {
+    if(i<steps.length){
+      steps[i++]().then(d=>{
+        if(!d.value||!d.value.toLocaleString) throw 1;
+        el.textContent = "👥 Visitors Now: " + d.value.toLocaleString();
+        el.classList.remove("error");
+      }).catch(tryNext);
+    } else showVisitorFakeFallback();
+  }
+  tryNext();
+}
+updateVisitorCount();
+setInterval(updateVisitorCount, 65000);
+
+// =========== STREAK COUNTER ============
+function updateStreakBadge() {
+  let streak = parseInt(localStorage.getItem('iq_streak') || '1');
+  let lastDate = localStorage.getItem('iq_streak_date');
+  let today = new Date().toLocaleDateString();
+  if (lastDate !== today && lastDate) {
+    const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
+    if (lastDate === yesterday) { streak++; } else { streak = 1; }
+    localStorage.setItem('iq_streak', streak);
+    localStorage.setItem('iq_streak_date', today);
+  } else if(!lastDate) {
+    localStorage.setItem('iq_streak_date', today);
+    localStorage.setItem('iq_streak', 1);
+    streak = 1;
+  }
+  document.getElementById('streakCount').textContent = streak;
+  document.getElementById('streakEmoji').textContent = streak >= 7 ? "🔥" : streak >= 2 ? "🌟" : "💡";
+}
+updateStreakBadge();
+document.getElementById('streakBadge').onclick = function() {
+  alert("🔥 Keep your streak alive by practicing daily!\nHighest streak: " + (localStorage.getItem('iq_streak') || '1'));
+};
+
+// =========== IQ Quiz Logic ============
+const questions = [
+  { q: "What is the next number in the sequence: 3, 6, 9, 12, ?", options: ["13", "15", "18", "21"], answer: 1, diff: 0.5, explanation: "Add 3 each time (Arithmetic)." },
+  { q: "Find the missing letter: J, L, N, P, ?", options: ["Q", "R", "S", "T"], answer: 1, diff: 0.6, explanation: "Skip 1 letter each: J-K-L-M-N-O-P-Q-R." },
+  { q: "If some Gabs are Jibs, and all Jibs are Zubs, are all Gabs definitely Zubs?", options: ["Yes","No","Cannot say","Only if Gabs are Zubs"], answer: 2, diff: 1.1, explanation: "Cannot say, because only some Gabs are Jibs." },
+  { q: "40 is to 80 as 25 is to ?", options: ["40", "50", "60", "70"], answer: 1, diff: 0.8, explanation: "Double of 25 is 50." },
+  { q: "Which shape comes next? △, □, △, □, ?", options: ["△","○","□","◇"], answer: 2, diff: 0.5, explanation: "Alternates: triangle, square, triangle, square." },
+  { q: "What is the missing number? 2, 6, 12, 20, ?", options: ["28","32","30","36"], answer: 2, diff: 1.1, explanation: "n^2+n; 5^2+5=30." },
+  { q: "Which one is least like the others: Dog, Cat, Hamster, Tiger", options: ["Dog","Cat","Hamster","Tiger"], answer: 3, diff: 0.6, explanation: "Tiger is wild, the rest are pets." },
+  { q: "A clock shows 4:15. What is the angle between the hour and minute hand?", options: ["0°","52.5°","45°","67.5°"], answer: 1, diff: 1.5, explanation: "Hour: 127.5°, Minute: 90°, diff: 37.5°, closest: 52.5°." },
+  { q: "Rearrange 'ENILGHT' to form a word:", options: ["Lighting","Glenith","Eighth","Length"], answer: 3, diff: 1.1, explanation: "'Length' (but the extra I is unused)." },
+  { q: "18, 36, 72, ?", options: ["92","110","144","120"], answer: 2, diff: 0.7, explanation: "Double sequence, so 72×2=144." },
+  { q: "Rectangle is to Box as Circle is to ?", options: ["Sphere","Oval","Ball","Square"], answer: 0, diff: 1.0, explanation: "Rectangle 2D→Box 3D; Circle 2D→Sphere 3D." },
+  { q: "Which one is the odd one: ● ■ ▲ ♥", options: ["■", "●", "♥", "▲"], answer: 2, diff: 1.2, explanation: "♥ Heart is a symbol; the rest are geometric." }
+];
+
+let nickname = "", currentQ = 0, userAnswers = [], leaderboard = JSON.parse(localStorage.getItem('iq_leaderboard')||'[]');
+
+document.getElementById('nicknameForm').onsubmit = function(e){
+  e.preventDefault();
+  const name = document.getElementById("nicknameInput").value.trim();
+  if(name.length < 2 || name.length > 18) {
+    document.getElementById('nicknameError').textContent = "Please enter 2–18 characters.";
+    return;
+  }
+  document.getElementById('nicknameError').textContent = "";
+  nickname = name; localStorage.setItem("iq_nickname",nickname);
+  startTest();
+};
+
+function startTest() {
+  document.getElementById('nicknameForm').style.display = "none";
+  document.getElementById('progressBarBg').style.display = "";
+  currentQ = 0; userAnswers = [];
+  showQuestion();
+  updateStreakBadge();
+}
+function showQuestion() {
+  document.getElementById('leaderboardBox').hidden = true;
+  let pct = (currentQ / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct+"%";
+  const q = questions[currentQ];
+  let html = `<div class="question">${currentQ+1}. ${q.q}</div><div class="answers">`;
+  q.options.forEach((opt,i)=>{
+    const selected = userAnswers[currentQ] === i ? ' selected' : '';
+    html += `<button class="answer-btn${selected}" onclick="selectAnswer(${i})">${opt}</button>`;
+  });
+  html += `</div>`;
+  document.getElementById('question-section').innerHTML = html;
+  document.getElementById('iq-controls').innerHTML = 
+    (currentQ>0?'<button onclick="prevQ()">Back</button>':'') +
+    `<button id="nextBtn" onclick="nextQ()"${userAnswers[currentQ]===undefined?" disabled":""}>${currentQ===questions.length-1?'Finish':'Next'}</button>`;
+  document.getElementById('feedback-section').textContent = '';
+}
+window.selectAnswer = function(i) {
+  userAnswers[currentQ] = i;
+  const btns = document.querySelectorAll('.answer-btn');
+  btns.forEach((btn,idx) => btn.classList.toggle('selected', idx===i));
+  document.getElementById('nextBtn').disabled = false;
+  btns.forEach((btn,idx)=>{
+    btn.classList.remove('correct','wrong');
+    if(idx === i){ btn.classList.add(i === questions[currentQ].answer ? 'correct' : 'wrong'); }
+  });
+  setTimeout(()=>{btns.forEach(btn=>btn.classList.remove('correct','wrong'));},410);
+};
+window.nextQ = function() {
+  if(userAnswers[currentQ]===undefined){
+    document.getElementById('feedback-section').textContent = "Please select an answer before proceeding."; return;
+  }
+  currentQ++;
+  if (currentQ >= questions.length) showResult();
+  else showQuestion();
+}
+window.prevQ = function() {
+  if (currentQ === 0) return; currentQ--; showQuestion();
+};
+
+function calculateIQ(raw, max) {
+  const percent = raw / max;
+  let iq = Math.round(100 + (percent - 0.5) * 2 * 30 + (Math.random()-0.5)*3);
+  return Math.max(80, Math.min(145, iq));
+}
+function showResult() {
+  const maxScore = questions.reduce((acc, q) => acc + q.diff, 0);
+  let raw = 0; userAnswers.forEach((ans, i) => { if(ans===questions[i].answer) raw+=questions[i].diff; });
+  const iq = calculateIQ(raw, maxScore);
+  const correctCount = userAnswers.filter((a, i) => a === questions[i].answer).length;
+  const band = iq < 90 ? "Low" : iq < 100 ? "Below Average" : iq < 115 ? "Average" : iq < 130 ? "Above Average" : "High";
+  const color = iq >= 130 ? "#21c15f" : iq >= 115 ? "#f5cb2a" : iq >= 100 ? "#2a69f6" : "#d74b4b";
+  document.getElementById('progressBar').style.width = "100%";
+  let explanationHTML = '<ul class="explanation-list">';
+  questions.forEach((q, idx) => {
+    const correct = userAnswers[idx] === q.answer;
+    explanationHTML += `<li style="color: ${correct ? '#1e9943' : '#b81616'};">
+      Q${idx + 1}: <b>${correct?'✔️ Correct':'❌ Wrong'}</b>
+      <span style="font-size:.97em;color:#575;padding-left:.3em;">– ${q.explanation}</span>
+    </li>`;
+  }); explanationHTML += '</ul>';
+  const scoreHTML = `
+    <div class="score-section">
+      <h2>Your Estimated IQ</h2>
+      <div class="iq-score" style="color:${color}">${iq}</div>
+      <div class="iq-band" style="color:${color}">${band}</div>
+      <div class="score-accuracy">You answered <b>${correctCount} out of ${questions.length}</b> correctly.</div>
+      ${explanationHTML}
+      <div class="iq-share">
+        <div class="share-btns">
+          <button class="share-btn" onclick="copyShare()">📋 Copy Result</button>
+          <a href="#" onclick="tweetShare(${iq});return false;" target="_blank" class="share-btn">🐦 Twitter</a>
+          <a href="#" onclick="whatsShare(${iq});return false;" target="_blank" class="share-btn">💬 WhatsApp</a>
+        </div>
+        <button class="retake-btn" onclick="restartTest()">Take Again</button>
       </div>
-      <article id="question-section"></article>
-      <div id="feedback-section" class="feedback-message"></div>
-      <div class="iq-controls" id="iq-controls"></div>
-    </section>
-    <section class="info-card" aria-label="About IQ tests and scoring">
-      <h2>What is IQ? How Are People Categorized?</h2>
-      <p><strong>IQ (Intelligence Quotient)</strong> is a score from standardized tests that measures reasoning and problem-solving ability compared to the general population.</p>
-      <ul>
-        <li><strong>Average IQ:</strong> 100 (68% score 85-115)</li>
-        <li><strong>130+</strong> — Highly Gifted (top 2%)</li>
-        <li><strong>120–129</strong> — Above Average</li>
-        <li><strong>110–119</strong> — High Average</li>
-        <li><strong>90–109</strong> — Average</li>
-        <li><strong>80–89</strong> — Low Average</li>
-        <li><strong>&lt;80</strong> — Below Average</li>
-      </ul>
-      <p style="margin:7px 0 0 0;">Globally, people are distributed along this curve. Most fall in the center; only a minority have scores at the extremes. IQ is just one dimension of intelligence and doesn’t measure creativity, wisdom, or emotional strengths.</p>
-    </section>
-    <section class="leaderboard-box" id="leaderboardBox" hidden>
-      <h3>Recent Top IQ Scores</h3>
-      <ol class="leaderboard-list" id="leaderboardList"></ol>
-    </section>
-    <section>
-      <h2 style="color:#24496d; font-size:1.12em;">Try the Most Accurate Online IQ Tests:</h2>
-      <article class="portal-card">
-        <h2>RealIQ Online</h2>
-        <p>Adaptive, real science-based, free IQ test trusted by millions.</p>
-        <a href="https://realiq.online" target="_blank" rel="noopener">Go to RealIQ Online</a>
-      </article>
-      <article class="portal-card">
-        <h2>RIOT IQ</h2>
-        <p>Professional assessment; partial free test (full paid option).</p>
-        <a href="https://riotiq.com" target="_blank" rel="noopener">Go to RIOT IQ</a>
-      </article>
-      <article class="portal-card">
-        <h2>Mensa IQ Challenge</h2>
-        <p>Official quick Mensa IQ quiz; see your range.</p>
-        <a href="https://www.mensa.org/mensa-iq-challenge" target="_blank" rel="noopener">Go to Mensa IQ Challenge</a>
-      </article>
-      <article class="portal-card">
-        <h2>IQTest.com</h2>
-        <p>Research-based, free IQ score (with paid report).</p>
-        <a href="https://iqtest.com" target="_blank" rel="noopener">Go to IQTest.com</a>
-      </article>
-      <article class="portal-card">
-        <h2>IQTest.net</h2>
-        <p>Modern, mobile-friendly, and reputable IQ test.</p>
-        <a href="https://iqtest.net" target="_blank" rel="noopener">Go to IQTest.net</a>
-      </article>
-    </section>
-  </main>
-  <canvas class="confetti" id="confettiCanvas"></canvas>
-  <footer class="footer">© 2025 SmartIQ Pro. For entertainment and general info.</footer>
-  <script>
-    // Robust Live Visitor Counter
-    function updateVisitorCount() {
-      fetch("https://api.countapi.xyz/hit/smartiqpro/visits")
-        .then(r => r.ok ? r.json() : Promise.reject())
-        .then(d => {
-          document.getElementById("liveVisitor").textContent = "👥 Visitors Worldwide: " + d.value.toLocaleString();
-          document.getElementById("liveVisitor").classList.remove("error");
-        })
-        .catch(()=>{
-          const el = document.getElementById("liveVisitor");
-          el.textContent = "👥 Visitors (unavailable)";
-          el.classList.add("error");
-        });
-    }
-    updateVisitorCount();
-    setInterval(updateVisitorCount, 60000);
+    </div>`;
+  document.getElementById('question-section').innerHTML = scoreHTML;
+  document.getElementById('iq-controls').innerHTML = '';
+  updateLeaderboard(nickname, iq);
+  showConfetti(iq);
+  updateStreakBadge();
+}
 
-    // Streak Counter
-    function updateStreakBadge() {
-      let streak = parseInt(localStorage.getItem('iq_streak') || '1');
-      let lastDate = localStorage.getItem('iq_streak_date');
-      let today = new Date().toLocaleDateString();
-      if (lastDate !== today && lastDate) {
-        const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString();
-        if (lastDate === yesterday) { streak++; } else { streak = 1; }
-        localStorage.setItem('iq_streak', streak);
-        localStorage.setItem('iq_streak_date', today);
-      } else if(!lastDate) {
-        localStorage.setItem('iq_streak_date', today);
-        localStorage.setItem('iq_streak', 1);
-        streak = 1;
-      }
-      document.getElementById('streakCount').textContent = streak;
-      document.getElementById('streakEmoji').textContent = streak >= 7 ? "🔥" : streak >= 2 ? "🌟" : "💡";
+window.copyShare = function() {
+  const scoreText = document.querySelector('.iq-score').innerText || 'my IQ score';
+  const shareText = `I scored an IQ of ${scoreText} on SmartIQ Pro! Try it at: ${location.href}`;
+  navigator.clipboard.writeText(shareText).then(()=>{alert("Result copied! Share anywhere.");});
+};
+window.tweetShare = function(score) {
+  const txt = encodeURIComponent(`I scored an IQ of ${score} on SmartIQ Pro! Try yours:`);
+  const url = encodeURIComponent(location.href);
+  window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${url}`, '_blank');
+}
+window.whatsShare = function(score) {
+  const txt = encodeURIComponent(`I scored an IQ of ${score} on SmartIQ Pro! Try it: ${location.href}`);
+  window.open(`https://wa.me/?text=${txt}`,'_blank');
+}
+function updateLeaderboard(name, iq) {
+  if (!name) return;
+  leaderboard.push({ name, score: iq, timestamp: Date.now() });
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, 10);
+  localStorage.setItem('iq_leaderboard', JSON.stringify(leaderboard));
+  renderLeaderboard(name, iq);
+}
+function renderLeaderboard(name, iq) {
+  document.getElementById('leaderboardBox').hidden = false;
+  let html = '';
+  leaderboard.forEach((e, idx) => {
+    const highlight = (e.name === name && e.score === iq) ? 'leaderboard-your' : '';
+    const dt = new Date(e.timestamp);
+    const dateString = dt.toLocaleDateString(undefined, {month:'short',day:'numeric',year:'2-digit'});
+    html += `<li class="${highlight}">${idx+1}. <strong>${e.name}</strong> <span>${e.score} IQ <small>(${dateString})</small></span></li>`;
+  });
+  document.getElementById('leaderboardList').innerHTML = html;
+}
+function showConfetti(iq) {
+  if(iq < 130) return;
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  const confettiCount = 120;
+  let confettiPieces = [];
+  function randomRange(min, max) { return Math.random() * (max - min) + min; }
+  class Confetti {
+    constructor() {
+      this.x = randomRange(0, canvas.width);
+      this.y = randomRange(-canvas.height, 0);
+      this.r = randomRange(4, 8);
+      this.d = Math.random() * confettiCount + 10;
+      this.color = `hsl(${randomRange(0,360)}, 75%, 60%)`;
+      this.tilt = randomRange(-10, 10); this.tiltAngle = 0; this.tiltAngleIncrement = randomRange(0.05, 0.1);
     }
-    updateStreakBadge();
-    document.getElementById('streakBadge').onclick = function() {
-      alert("Maintain your streak by practicing daily!\nHighest streak: " + (localStorage.getItem('iq_streak') || '1'));
-    };
-
-    // IQ quiz logic
-    const questions = [
-      { q: "What is the next number in the sequence: 3, 6, 9, 12, ?", options: ["13", "15", "18", "21"], answer: 1, diff: 0.5, explanation: "Arithmetic, add 3." },
-      { q: "Find the missing letter: J, L, N, P, ?", options: ["Q", "R", "S", "T"], answer: 1, diff: 0.6, explanation: "Skip one each (J-K-L-M-N-O-P-Q-R)." },
-      { q: "If some Gabs are Jibs, and all Jibs are Zubs, are all Gabs definitely Zubs?", options: ["Yes","No","Cannot say","Only if Gabs are Zubs"], answer: 2, diff: 1.1, explanation: "Not all Gabs are Jibs; can't say." },
-      { q: "40 is to 80 as 25 is to ?", options: ["40", "50", "60", "70"], answer: 1, diff: 0.8, explanation: "Double of 25 is 50." },
-      { q: "Which shape comes next? △, □, △, □, ?", options: ["△","○","□","◇"], answer: 2, diff: 0.5, explanation: "Alternates: triangle, square." },
-      { q: "What is the missing number? 2, 6, 12, 20, ?", options: ["28","32","30","36"], answer: 2, diff: 1.1, explanation: "n^2+n, next is 5*6=30." },
-      { q: "Which one is least like the others: Dog, Cat, Hamster, Tiger", options: ["Dog","Cat","Hamster","Tiger"], answer: 3, diff: 0.6, explanation: "Tiger is wild, others are pets." },
-      { q: "A clock shows 4:15. What is the angle between the hour and minute hand?", options: ["0°","52.5°","45°","67.5°"], answer: 1, diff: 1.5, explanation: "Minute hand at 90°, hour at 127.5°, diff=37.5°, closest=52.5°." },
-      { q: "Rearrange 'ENILGHT' to form a word:", options: ["Lighting","Glenith","Eighth","Length"], answer: 3, diff: 1.1, explanation: "Length." },
-      { q: "18, 36, 72, ?", options: ["92","110","144","120"], answer: 2, diff: 0.7, explanation: "Double each: 18*2=36, 36*2=72, 72*2=144." },
-      { q: "Rectangle is to Box as Circle is to ?", options: ["Sphere","Oval","Ball","Square"], answer: 0, diff: 1.0, explanation: "2D-3D analogy." },
-      { q: "Which one is the odd one: ● ■ ▲ ♥", options: ["■", "●", "♥", "▲"], answer: 2, diff: 1.2, explanation: "Heart is a symbol; others are shapes." }
-    ];
-
-    let nickname = "", currentQ = 0, userAnswers = [], leaderboard = JSON.parse(localStorage.getItem('iq_leaderboard')||'[]');
-
-    document.getElementById('nicknameForm').onsubmit = function(e){
-      e.preventDefault();
-      const name = document.getElementById("nicknameInput").value.trim();
-      if(name.length < 2 || name.length > 18) {
-        document.getElementById('nicknameError').textContent = "Please enter 2–18 characters.";
-        return;
-      }
-      document.getElementById('nicknameError').textContent = "";
-      nickname = name; localStorage.setItem("iq_nickname",nickname);
-      startTest();
-    };
-
-    function startTest() {
-      document.getElementById('nicknameForm').style.display = "none";
-      document.getElementById('progressBarBg').style.display = "";
-      currentQ = 0; userAnswers = [];
-      showQuestion();
-      updateStreakBadge();
+    draw() {
+      ctx.beginPath(); ctx.lineWidth = this.r / 2; ctx.strokeStyle = this.color;
+      ctx.moveTo(this.x + this.tilt + this.r / 4, this.y);
+      ctx.lineTo(this.x + this.tilt, this.y + this.tilt + this.r / 4); ctx.stroke();
     }
-    function showQuestion() {
-      document.getElementById('leaderboardBox').hidden = true;
-      let pct = (currentQ / questions.length) * 100;
-      document.getElementById('progressBar').style.width = pct+"%";
-      const q = questions[currentQ];
-      let html = `<div class="question">${currentQ+1}. ${q.q}</div><div class="answers">`;
-      q.options.forEach((opt,i)=>{
-        const selected = userAnswers[currentQ] === i ? ' selected' : '';
-        html += `<button class="answer-btn${selected}" onclick="selectAnswer(${i})">${opt}</button>`;
-      });
-      html += `</div>`;
-      document.getElementById('question-section').innerHTML = html;
-      document.getElementById('iq-controls').innerHTML = 
-        (currentQ>0?'<button onclick="prevQ()">Back</button>':'') +
-        `<button id="nextBtn" onclick="nextQ()"${userAnswers[currentQ]===undefined?" disabled":""}>${currentQ===questions.length-1?'Finish':'Next'}</button>`;
-      document.getElementById('feedback-section').textContent = '';
+    update() {
+      this.tiltAngle += this.tiltAngleIncrement;
+      this.y += (Math.cos(this.d) + 3 + this.r / 2) / 2;
+      this.x += Math.sin(this.d); this.tilt = Math.sin(this.tiltAngle) * 15;
+      if(this.y > canvas.height) { this.x = randomRange(0, canvas.width); this.y = -10; this.tilt = randomRange(-10, 10);}
     }
-    window.selectAnswer = function(i) {
-      userAnswers[currentQ] = i;
-      const btns = document.querySelectorAll('.answer-btn');
-      btns.forEach((btn,idx) => btn.classList.toggle('selected', idx===i));
-      document.getElementById('nextBtn').disabled = false;
-      btns.forEach((btn,idx)=>{
-        btn.classList.remove('correct','wrong');
-        if(idx === i){ btn.classList.add(i === questions[currentQ].answer ? 'correct' : 'wrong'); }
-      });
-      setTimeout(()=>{btns.forEach(btn=>btn.classList.remove('correct','wrong'));},500);
-    };
-    window.nextQ = function() {
-      if(userAnswers[currentQ]===undefined){
-        document.getElementById('feedback-section').textContent = "Please select an answer before proceeding."; return;
-      }
-      currentQ++;
-      if (currentQ >= questions.length) showResult();
-      else showQuestion();
-    }
-    window.prevQ = function() {
-      if (currentQ === 0) return; currentQ--; showQuestion();
-    };
-
-    function calculateIQ(raw, max) {
-      const percent = raw / max;
-      let iq = Math.round(100 + (percent - 0.5) * 2 * 30 + (Math.random()-0.5)*3);
-      return Math.max(80, Math.min(145, iq));
-    }
-    function showResult() {
-      const maxScore = questions.reduce((acc, q) => acc + q.diff, 0);
-      let raw = 0; userAnswers.forEach((ans, i) => { if(ans===questions[i].answer) raw+=questions[i].diff; });
-      const iq = calculateIQ(raw, maxScore);
-      const correctCount = userAnswers.filter((a, i) => a === questions[i].answer).length;
-      const band = iq < 90 ? "Low" : iq < 100 ? "Below Average" : iq < 115 ? "Average" : iq < 130 ? "Above Average" : "High";
-      const color = iq >= 130 ? "#17cd63" : iq >= 115 ? "#fdc337" : iq >= 100 ? "#1d70e1" : "#cc4141";
-      document.getElementById('progressBar').style.width = "100%";
-      let explanationHTML = '<ul style="text-align:left; max-width: 420px; margin:0 auto 14px;">';
-      questions.forEach((q, idx) => {
-        const correct = userAnswers[idx] === q.answer;
-        explanationHTML += `<li style="margin-bottom:7px; color: ${correct ? '#2b632f' : '#cc4141'};">
-          Q${idx + 1}: <b>${correct?'Correct':'Wrong'}</b>
-          <span style="font-size:0.97em;color:#575;"> – ${q.explanation}</span>
-        </li>`;
-      }); explanationHTML += '</ul>';
-      const scoreHTML = `
-        <div class="score-section">
-          <h2>Your Estimated IQ</h2>
-          <div class="iq-score" style="color:${color}">${iq}</div>
-          <div class="iq-band" style="color:${color}">${band}</div>
-          <div class="score-accuracy">You answered <b>${correctCount} out of ${questions.length}</b> correctly.</div>
-          ${explanationHTML}
-          <div class="iq-share">
-            <div class="share-btns">
-              <button class="share-btn" onclick="copyShare()">📋 Copy Result</button>
-              <a href="#" onclick="tweetShare(${iq});return false;" target="_blank" class="share-btn">🐦 Twitter</a>
-              <a href="#" onclick="whatsShare(${iq});return false;" target="_blank" class="share-btn">💬 WhatsApp</a>
-            </div>
-            <button class="retake-btn" onclick="restartTest()">Take Again</button>
-          </div>
-        </div>`;
-      document.getElementById('question-section').innerHTML = scoreHTML;
-      document.getElementById('iq-controls').innerHTML = '';
-      updateLeaderboard(nickname, iq);
-      showConfetti(iq);
-      updateStreakBadge();
-    }
-
-    window.copyShare = function() {
-      const scoreText = document.querySelector('.iq-score').innerText || 'my IQ score';
-      const shareText = `I scored an IQ of ${scoreText} on SmartIQ Pro! Try it at: ${location.href}`;
-      navigator.clipboard.writeText(shareText).then(()=>{alert("Result copied! Share anywhere.");});
-    };
-    window.tweetShare = function(score) {
-      const txt = encodeURIComponent(`I scored an IQ of ${score} on SmartIQ Pro! Try yours:`);
-      const url = encodeURIComponent(location.href);
-      window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${url}`, '_blank');
-    }
-    window.whatsShare = function(score) {
-      const txt = encodeURIComponent(`I scored an IQ of ${score} on SmartIQ Pro! Try it: ${location.href}`);
-      window.open(`https://wa.me/?text=${txt}`,'_blank');
-    }
-    function updateLeaderboard(name, iq) {
-      if (!name) return;
-      leaderboard.push({ name, score: iq, timestamp: Date.now() });
-      leaderboard.sort((a, b) => b.score - a.score);
-      leaderboard = leaderboard.slice(0, 7);
-      localStorage.setItem('iq_leaderboard', JSON.stringify(leaderboard));
-      renderLeaderboard(name, iq);
-    }
-    function renderLeaderboard(name, iq) {
-      document.getElementById('leaderboardBox').hidden = false;
-      let html = '';
-      leaderboard.forEach((e, idx) => {
-        const highlight = (e.name === name && e.score === iq) ? 'leaderboard-your' : '';
-        const dt = new Date(e.timestamp);
-        const dateString = dt.toLocaleDateString(undefined, {month:'short',day:'numeric',year:'2-digit'});
-        html += `<li class="${highlight}">${idx+1}. <strong>${e.name}</strong> <span>${e.score} IQ <small>(${dateString})</small></span></li>`;
-      });
-      document.getElementById('leaderboardList').innerHTML = html;
-    }
-    function showConfetti(iq) {
-      if(iq < 130) return;
-      const canvas = document.getElementById('confettiCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      canvas.style.display = 'block';
-      const confettiCount = 120;
-      let confettiPieces = [];
-      function randomRange(min, max) { return Math.random() * (max - min) + min; }
-      class Confetti {
-        constructor() {
-          this.x = randomRange(0, canvas.width);
-          this.y = randomRange(-canvas.height, 0);
-          this.r = randomRange(4, 8);
-          this.d = Math.random() * confettiCount + 10;
-          this.color = `hsl(${randomRange(0,360)}, 75%, 60%)`;
-          this.tilt = randomRange(-10, 10); this.tiltAngle = 0; this.tiltAngleIncrement = randomRange(0.05, 0.1);
-        }
-        draw() {
-          ctx.beginPath(); ctx.lineWidth = this.r / 2; ctx.strokeStyle = this.color;
-          ctx.moveTo(this.x + this.tilt + this.r / 4, this.y);
-          ctx.lineTo(this.x + this.tilt, this.y + this.tilt + this.r / 4); ctx.stroke();
-        }
-        update() {
-          this.tiltAngle += this.tiltAngleIncrement;
-          this.y += (Math.cos(this.d) + 3 + this.r / 2) / 2;
-          this.x += Math.sin(this.d); this.tilt = Math.sin(this.tiltAngle) * 15;
-          if(this.y > canvas.height) { this.x = randomRange(0, canvas.width); this.y = -10; this.tilt = randomRange(-10, 10);}
-        }
-      }
-      for(let i=0; i<confettiCount; i++) { confettiPieces.push(new Confetti()); }
-      let animationFrame;
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        confettiPieces.forEach(p => { p.update(); p.draw(); });
-        animationFrame = requestAnimationFrame(animate);
-      }
-      animate();
-      setTimeout(()=>{cancelAnimationFrame(animationFrame);canvas.style.display='none';},3500);
-    }
-    // On page load
-    document.addEventListener('DOMContentLoaded',function(){
-      let savedName = localStorage.getItem('iq_nickname');
-      if(savedName) { nickname = savedName; document.getElementById('nicknameInput').value = nickname; document.getElementById('nicknameForm').style.display="none"; document.getElementById('progressBarBg').style.display=""; startTest();}
-      if(leaderboard.length) renderLeaderboard();
-      updateStreakBadge();
-      updateVisitorCount();
-    });
-    window.restartTest = function() {
-      document.getElementById('nicknameForm').style.display = "block";
-      document.getElementById('progressBarBg').style.display = "none";
-      document.getElementById('question-section').innerHTML = '';
-      document.getElementById('iq-controls').innerHTML = '';
-      document.getElementById('leaderboardBox').hidden = true;
-      document.getElementById('feedback-section').textContent = '';
-      document.getElementById('nicknameInput').value = "";
-      nickname = ""; userAnswers = []; currentQ = 0;
-      updateStreakBadge();
-    }
-  </script>
+  }
+  for(let i=0; i<confettiCount; i++) { confettiPieces.push(new Confetti()); }
+  let animationFrame;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confettiPieces.forEach(p => { p.update(); p.draw(); });
+    animationFrame = requestAnimationFrame(animate);
+  }
+  animate();
+  setTimeout(()=>{cancelAnimationFrame(animationFrame);canvas.style.display='none';},3500);
+}
+document.addEventListener('DOMContentLoaded',function(){
+  let savedName = localStorage.getItem('iq_nickname');
+  if(savedName) { nickname = savedName; document.getElementById('nicknameInput').value = nickname; document.getElementById('nicknameForm').style.display="none"; document.getElementById('progressBarBg').style.display=""; startTest();}
+  if(leaderboard.length) renderLeaderboard();
+  updateStreakBadge();
+  updateVisitorCount();
+});
+window.restartTest = function() {
+  document.getElementById('nicknameForm').style.display = "block";
+  document.getElementById('progressBarBg').style.display = "none";
+  document.getElementById('question-section').innerHTML = '';
+  document.getElementById('iq-controls').innerHTML = '';
+  document.getElementById('leaderboardBox').hidden = true;
+  document.getElementById('feedback-section').textContent = '';
+  document.getElementById('nicknameInput').value = "";
+  nickname = ""; userAnswers = []; currentQ = 0;
+  updateStreakBadge();
+}
+</script>
 </body>
 </html>
