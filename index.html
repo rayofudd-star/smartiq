@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>SmartIQ Pro – Free Interactive IQ Test & Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Take the SmartIQ Pro IQ test – interactive, realistic, and fun, with global score comparisons, daily streaks, instant explanations, and the world's best IQ resources." />
+  <meta name="description" content="Take the SmartIQ Pro IQ test – interactive, realistic, and fun, with global score comparisons, daily streaks and the world's best IQ resources." />
   <meta name="theme-color" content="#1d70e1" />
   <style>
     html { box-sizing: border-box; }
@@ -12,8 +12,8 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f9fbfd;
-      color: #272c34;
+      background: linear-gradient(135deg, #f9fbfd 0%, #e7f0ff 100%);
+      color: #222c34;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -21,95 +21,107 @@
     }
     .header {
       width: 100%;
-      max-width: 550px;
+      max-width: 560px;
       text-align: center;
-      background: linear-gradient(95deg, #1d70e1 60%, #fdc337 170%);
+      background: linear-gradient(100deg, #1d70e1 60%, #fdc337 180%);
       color: #fff;
-      padding: 48px 16px 24px;
-      border-radius: 0 0 16px 16px;
-      margin-bottom: 0.5em;
+      padding: 52px 16px 26px;
+      border-radius: 0 0 18px 18px;
+      margin-bottom: 0.8em;
       position: relative;
       overflow: visible;
+      box-shadow: 0 4px 40px #1d70e130;
     }
-    .header h1 { margin: 0 0 0.6em; font-size: 2.15em; letter-spacing: 1px; font-weight: 800; }
+    .header h1 { margin: 0 0 0.6em; font-size: 2.2em; font-weight: 900; letter-spacing: 1.1px; 
+      text-shadow: 0px 2px 14px #fdc33766; }
     .header .live-visitor {
-      margin-top: 9px; background: rgba(255,255,255,0.16); border-radius: 18px; padding: 5px 15px;
-      font-weight: 600; display: inline-block; font-size: 1.1rem; letter-spacing: 0.04em;
-      transition: background-color 0.4s; 
-      user-select: text; box-shadow: 0 2px 12px #fdc33733;
+      margin-top: 10px; 
+      background: rgba(255,255,255,0.21);
+      border-radius: 19px;
+      padding: 7px 22px;
+      font-weight: 600;
+      display: inline-block;
+      font-size: 1.10rem;
+      letter-spacing: 0.035em;
+      transition: background-color 0.4s;
+      user-select: text;
+      box-shadow: 0 2px 16px #fdc33744;
+      border: 1.5px solid #d7e9ff60;
+      min-width: 150px;
     }
-    .main { width: 100%; max-width: 550px; margin: 0 auto 44px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 32px;}
+    .main { width: 100%; max-width: 540px; margin: 0 auto 44px auto; padding: 0 13px; display: flex; flex-direction: column; gap: 36px;}
     .iq-box {
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 6px 30px rgba(55,90,190,0.13);
-      padding: 2.1em 1.1em 2.1em 1.1em;
+      background: #fffefe;
+      border-radius: 16px;
+      box-shadow: 0 8px 36px #1d70e122;
+      padding: 2.25em 1.1em 2.2em 1.1em;
       display: flex; flex-direction: column; align-items: center; gap: 20px;
       position: relative;
-      min-height: 380px;
+      min-height: 420px;
+      margin-top: 12px;
     }
     .streak-badge {
-      position: absolute; right: 18px; top: 8px;
-      background: linear-gradient(90deg, #fdc337 50%, #fffbe6 120%);
+      position: absolute; right: 21px; top: 10px;
+      background: linear-gradient(93deg, #fdc337 55%, #fffbe6 140%);
       color: #1d70e1;
       font-weight: bold;
-      border-radius: 13px;
-      font-size: 1em; padding: 7px 14px;
-      box-shadow: 0 4px 15px #fdc33755;
-      display: flex; align-items: center; gap:7px; user-select: none; cursor: pointer; border: 2px solid #fae6b0; z-index: 9;
-      transition: background 0.25s;
+      border-radius: 14px;
+      font-size: .97em; padding: 7px 15px 8px 13px;
+      box-shadow: 0 6px 16px #fdc33740;
+      display: flex; align-items: center; gap:7px; user-select: none; cursor: pointer; border: 2px solid #e5ceac; z-index: 9;
     }
-    .progress-bg { width: 100%; height: 16px; border-radius: 9px; background: #e8eefc; overflow: hidden; margin-bottom: 17px; box-shadow: inset 0 2px 4px #c2d4f2;}
-    .progress-fill { width: 0%; height: 100%; border-radius:9px 0 0 9px; background: linear-gradient(95deg, #1d70e1, #fdc337 97%); transition: width 0.7s cubic-bezier(.57,.01,.75,1.02);}
-    .question { font-size: 1.14rem; font-weight: 600; text-align: center; min-height: 64px; user-select: text;}
-    .answers {display:flex;flex-direction:column;gap:12px;width:100%;max-width:430px;}
+    .progress-bg { width: 100%; height: 17px; border-radius: 10px; background: #eaf0fd; margin-bottom: 19px;
+      box-shadow: inset 0 2px 5px #c9d8f3;}
+    .progress-fill { width: 0%; height: 100%; border-radius:10px 0 0 10px;
+      background: linear-gradient(95deg, #1d70e1, #fdc337 120%);
+      transition: width 0.7s cubic-bezier(.5,.01,.6,1.05); }
+    .question { font-size: 1.13rem; font-weight: 600; text-align: center; min-height: 62px; user-select: text;}
+    .answers {display: flex;flex-direction:column;gap:13px;width:100%;max-width:440px;}
     .answer-btn {
-      background: #f1f5fb; border: 2px solid transparent; border-radius: 11px;
-      padding: 12px 16px; font-size: 1.04rem;
-      color: #222; font-weight: 500;
-      cursor: pointer; transition:all 0.18s; box-shadow: 0 1px 6px rgba(80,100,180,0.07);
-      outline: none; text-align:left;
-      opacity:1; min-width: 126px;
+      background: #f1f5fb; border: 2.1px solid transparent; border-radius: 12px;
+      padding: 14px 16px; font-size: 1.03rem; color: #233; font-weight: 500;
+      cursor: pointer; transition:all 0.14s; box-shadow: 0 2px 11px #1d70e110;
+      outline: none; text-align:left; min-width: 128px;
     }
-    .answer-btn.selected, .answer-btn:active {background: #fdc337; border-color: #cca529; color: #27314b;}
-    .answer-btn.correct { border-color: #129d3e !important; background: #edffe6 !important; color: #129d3e !important;}
-    .answer-btn.wrong { border-color: #cc4141 !important; background: #fff2f1 !important; color: #cc4141 !important;}
+    .answer-btn.selected, .answer-btn:active {background: #fdc337; border-color: #cbad29; color: #27314b;}
+    .answer-btn.correct { border-color: #24af56 !important; background: #ecffe8 !important; color: #18c061 !important;}
+    .answer-btn.wrong { border-color: #cc4141 !important; background: #ffeaea !important; color: #cc4141 !important;}
     .iq-controls {text-align:center;margin-top:13px;}
-    .iq-controls button { padding: 10px 30px; background: #1d70e1; color: #fff; border: none; font-weight: 700; font-size: 1em; border-radius: 11px; cursor: pointer; box-shadow: 0 3px 8px rgba(61,111,181,0.10); margin:0 10px 6px 10px;transition:background .21s;}
+    .iq-controls button { padding: 11px 34px; background: #1d70e1; color: #fff; border: none; font-weight: 700; font-size: 1em; border-radius: 12px; cursor: pointer; box-shadow: 0 3px 12px #1d70e12a; margin:0 13px 7px 13px;transition:background .16s;}
     .iq-controls button:hover:not(:disabled) {background: #135ecf;}
     .iq-controls button:disabled {background: #b5c3de;}
-    .nickname-input {width:100%;max-width:380px; text-align:center;margin-bottom:10px;}
-    .nickname-input input {width:70%;max-width:210px; font-size:1.07rem; padding: 9px 13px; border-radius:11px; border: 1.5px solid #d7dffe;}
-    .nickname-input input:focus{border-color:#1d70e1;box-shadow:0 0 10px #6db5fd44}
-    .nickname-input button {padding:9px 22px; margin-left:6px; border:none; background:#fdc337; color:#26314b; font-size:1.1rem; font-weight:700; border-radius:11px; cursor:pointer;}
+    .nickname-input {width:100%;max-width:390px; text-align:center;margin-bottom:13px;}
+    .nickname-input input {width:71%;max-width:220px; font-size:1.07rem; padding: 10px 13px; border-radius:14px; border: 2px solid #d8e2fc;}
+    .nickname-input input:focus{border-color:#1d70e1;box-shadow:0 0 11px #6db5fd2a;}
+    .nickname-input button {padding:10px 22px; margin-left:7px; border:none; background:#fdc337; color:#26314b; font-size:1.1rem; font-weight:700; border-radius:13px; cursor:pointer;}
     .nickname-input button:hover {background:#cca529;}
-    .score-section {text-align:center;margin-top:14px;}
+    .score-section {text-align:center;margin-top:15px;}
     .iq-score {font-size:2.7em;color:#fdc337;font-weight:700;margin:12px 0 4px 0;}
     .iq-band {font-size:1.18em;font-weight:600;color:#1d70e1;margin-bottom:12px;letter-spacing:0.08em;}
-    .score-accuracy{font-size:.95rem; color:#575757cc; margin-bottom:14px;}
-    .iq-share {margin-top:4px;display:flex;flex-direction:column;align-items:center;gap:11px;}
+    .score-accuracy{font-size:.96rem; color:#575757cc; margin-bottom:13px;}
+    .iq-share {margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:12px;}
     .share-btns {display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-    .share-btn {background:#fdc337;border-radius:12px;color:#26314b;font-weight:700;font-size:1rem;padding:10px 22px; box-shadow:0 2px 10px #fdc33733;cursor:pointer;text-align:center;text-decoration:none;border:none;}
+    .share-btn {background:#fdc337;border-radius:11px;color:#26314b;font-weight:700;font-size:1rem;padding:10px 21px; box-shadow:0 2px 9px #fdc33718;cursor:pointer;text-align:center;border:none;}
     .share-btn:hover{background:#cca529;}
-    .retake-btn{background:#1d70e1;color:#fff;border:none;border-radius:12px;padding:10px 38px;font-weight:700;font-size:1.07rem;cursor:pointer;margin-top:12px;}
+    .retake-btn{background:#1d70e1;color:#fff;border:none;border-radius:12px;padding:9px 32px;font-weight:700;font-size:1.07rem;cursor:pointer;margin-top:10px;}
     .retake-btn:hover{background:#135ecf;}
-    .feedback-message{color:#cc4141;font-weight:600;user-select:none;margin:11px 0 0 0;font-size:.96em;text-align:center;min-height:1.2em;}
-    .leaderboard-box{background:#fff;border-radius:14px;box-shadow:0 5px 22px #1d70e114;padding: 1.1em 1em 1.2em 1em;margin:0 auto 15px auto;max-width:550px;}
-    .leaderboard-box h3{margin:0 0 10px 0;color:#135ecf; font-size:1.09em;}
-    .leaderboard-list{list-style:none;padding:0;margin:0;font-weight:600;font-size:0.96em;max-height:170px;overflow-y:auto;}
-    .leaderboard-list li{display:flex;justify-content:space-between;padding:8px 6px 7px 6px;border-bottom:1px solid #e3e9fd;}
-    .leaderboard-list li.leaderboard-your{background:#e0f2fe;font-weight:700;}
-    .portal-card{background:#fff;border-radius:14px;box-shadow:0 2px 13px #1d70e108;padding:1em 1em 1.04em 1em;margin-bottom:7px;}
-    .portal-card h2{margin:0 0 0.2em 0;font-size:1.12em;color:#1d70e1;}
-    .portal-card p{margin:0 0 8px 0;font-size:.99em;font-weight:500;color:#3d4b6bcc;line-height:1.3;}
+    .feedback-message{color:#cc4141;font-weight:600;user-select:none;margin:10px 0 0 0;font-size:.96em;text-align:center;min-height:1.2em;}
+    .leaderboard-box{background:#fffefe;border-radius:15px;box-shadow:0 5px 17px #1d70e106;padding: 1.2em 1em 1.1em 1em;margin:0 auto 14px auto;max-width:550px;}
+    .leaderboard-box h3{margin:0 0 10px 0;color:#135ecf; font-size:1.07em;}
+    .leaderboard-list{list-style:none;padding:0;margin:0;font-weight:600;font-size:0.97em;max-height:170px;overflow-y:auto;}
+    .leaderboard-list li{display:flex;justify-content:space-between;padding:7px 6px 7px 6px;border-bottom:1px solid #e3e9fd;}
+    .leaderboard-list li.leaderboard-your{background:#e3f6fc;font-weight:700;}
+    .portal-card{background:#fff;border-radius:14px;box-shadow:0 2px 11px #1d70e109;padding:1em 1em 1em 1em;margin-bottom:7px;}
+    .portal-card h2{margin:0 0 0.2em 0;font-size:1.1em;color:#1d70e1;}
+    .portal-card p{margin:0 0 8px 0;font-size:.98em;font-weight:500;color:#3d4b6bcc;line-height:1.28;}
     .portal-card a{color:#1d70e1;font-weight:700;text-decoration:none;}
     .portal-card a:hover{color:#fdc337;}
-    .info-card{margin:6px 0 20px 0;background:#fffbe9;border-radius:12px;padding:1em 1em 1.1em 1em;box-shadow:0 2px 12px #fdc33721;}
-    .info-card h2{color:#1d70e1;margin:0 0 .4em 0;font-size:1.08em}
-    .info-card ul{margin: 0 0 0 1.1em;padding:0;}
+    .info-card{margin:7px 0 21px 0;background:#fffbe9;border-radius:12px;padding:1em 1em 1.1em 1em;box-shadow:0 2px 12px #fdc33719;}
+    .info-card h2{color:#1d70e1;margin:0 0 .4em 0;font-size:1.07em}
+    .info-card ul{margin: 0 0 0 1.18em;padding:0;}
     .confetti{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;display:none;}
-    .footer{font-size:0.96rem;font-weight:500;padding:16px 12px;color:#6a7a9d;text-align:center;}
-    @media (max-width: 600px){.header h1{font-size:1.7rem;}}
+    .footer{font-size:0.98rem;font-weight:500;padding:15px 10px;color:#6a7a9d;text-align:center;}
+    @media (max-width: 600px){.header h1{font-size:1.58rem;}}
   </style>
 </head>
 <body>
@@ -132,8 +144,6 @@
       <div id="feedback-section" class="feedback-message"></div>
       <div class="iq-controls" id="iq-controls"></div>
     </section>
-
-    <!-- New: About IQ & Score Explanation -->
     <section class="info-card" aria-label="About IQ tests and scoring">
       <h2>What is IQ? How Are People Categorized?</h2>
       <p><strong>IQ (Intelligence Quotient)</strong> is a score from standardized tests that measures reasoning and problem-solving ability compared to the general population.</p>
@@ -148,12 +158,10 @@
       </ul>
       <p style="margin:7px 0 0 0;">Globally, people are distributed along this curve. Most fall in the center; only a minority have scores at the extremes. IQ is just one dimension of intelligence and doesn’t measure creativity, wisdom, or emotional strengths.</p>
     </section>
-
     <section class="leaderboard-box" id="leaderboardBox" hidden>
       <h3>Recent Top IQ Scores</h3>
       <ol class="leaderboard-list" id="leaderboardList"></ol>
     </section>
-
     <section>
       <h2 style="color:#24496d; font-size:1.12em;">Try the Most Accurate Online IQ Tests:</h2>
       <article class="portal-card">
@@ -186,12 +194,22 @@
   <canvas class="confetti" id="confettiCanvas"></canvas>
   <footer class="footer">© 2025 SmartIQ Pro. For entertainment and general info.</footer>
   <script>
-    // Live Visitor Counter
-    fetch("https://api.countapi.xyz/hit/smartiqpro/visits")
-      .then(r => r.json())
-      .then(d => {document.getElementById("liveVisitor").textContent = "👥 Visitors Worldwide: " + d.value.toLocaleString()})
-      .catch(()=>{document.getElementById("liveVisitor").textContent="👥 Visitors (unavailable)"})
-    setInterval(()=>{fetch("https://api.countapi.xyz/hit/smartiqpro/visits").then(r=>r.json()).then(d=>{document.getElementById("liveVisitor").textContent = "👥 Visitors Worldwide: " + d.value.toLocaleString()});}, 60000);
+    // Robust Live Visitor Counter
+    function updateVisitorCount() {
+      fetch("https://api.countapi.xyz/hit/smartiqpro/visits")
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(d => {
+          document.getElementById("liveVisitor").textContent = "👥 Visitors Worldwide: " + d.value.toLocaleString();
+          document.getElementById("liveVisitor").classList.remove("error");
+        })
+        .catch(()=>{
+          const el = document.getElementById("liveVisitor");
+          el.textContent = "👥 Visitors (unavailable)";
+          el.classList.add("error");
+        });
+    }
+    updateVisitorCount();
+    setInterval(updateVisitorCount, 60000);
 
     // Streak Counter
     function updateStreakBadge() {
@@ -215,23 +233,24 @@
     document.getElementById('streakBadge').onclick = function() {
       alert("Maintain your streak by practicing daily!\nHighest streak: " + (localStorage.getItem('iq_streak') || '1'));
     };
-    // IQ test logic similar to previous with improved feedback
+
+    // IQ quiz logic
     const questions = [
       { q: "What is the next number in the sequence: 3, 6, 9, 12, ?", options: ["13", "15", "18", "21"], answer: 1, diff: 0.5, explanation: "Arithmetic, add 3." },
       { q: "Find the missing letter: J, L, N, P, ?", options: ["Q", "R", "S", "T"], answer: 1, diff: 0.6, explanation: "Skip one each (J-K-L-M-N-O-P-Q-R)." },
       { q: "If some Gabs are Jibs, and all Jibs are Zubs, are all Gabs definitely Zubs?", options: ["Yes","No","Cannot say","Only if Gabs are Zubs"], answer: 2, diff: 1.1, explanation: "Not all Gabs are Jibs; can't say." },
       { q: "40 is to 80 as 25 is to ?", options: ["40", "50", "60", "70"], answer: 1, diff: 0.8, explanation: "Double of 25 is 50." },
       { q: "Which shape comes next? △, □, △, □, ?", options: ["△","○","□","◇"], answer: 2, diff: 0.5, explanation: "Alternates: triangle, square." },
-      { q: "What is the missing number? 2, 6, 12, 20, ?", options: ["28","32","30","36"], answer: 0, diff: 1.1, explanation: "n^2+n, so next is 5*6=30." },
+      { q: "What is the missing number? 2, 6, 12, 20, ?", options: ["28","32","30","36"], answer: 2, diff: 1.1, explanation: "n^2+n, next is 5*6=30." },
       { q: "Which one is least like the others: Dog, Cat, Hamster, Tiger", options: ["Dog","Cat","Hamster","Tiger"], answer: 3, diff: 0.6, explanation: "Tiger is wild, others are pets." },
-      { q: "A clock shows 4:15. What is the angle between the hour and minute hand?", options: ["0°","52.5°","45°","67.5°"], answer: 1, diff: 1.5, explanation: "Minute at 90°, hour at 127.5°: diff=37.5°, closest 52.5°." },
+      { q: "A clock shows 4:15. What is the angle between the hour and minute hand?", options: ["0°","52.5°","45°","67.5°"], answer: 1, diff: 1.5, explanation: "Minute hand at 90°, hour at 127.5°, diff=37.5°, closest=52.5°." },
       { q: "Rearrange 'ENILGHT' to form a word:", options: ["Lighting","Glenith","Eighth","Length"], answer: 3, diff: 1.1, explanation: "Length." },
       { q: "18, 36, 72, ?", options: ["92","110","144","120"], answer: 2, diff: 0.7, explanation: "Double each: 18*2=36, 36*2=72, 72*2=144." },
       { q: "Rectangle is to Box as Circle is to ?", options: ["Sphere","Oval","Ball","Square"], answer: 0, diff: 1.0, explanation: "2D-3D analogy." },
       { q: "Which one is the odd one: ● ■ ▲ ♥", options: ["■", "●", "♥", "▲"], answer: 2, diff: 1.2, explanation: "Heart is a symbol; others are shapes." }
     ];
 
-    let nickname = "", currentQ = 0, rawScore = 0, userAnswers = [], leaderboard = JSON.parse(localStorage.getItem('iq_leaderboard')||'[]');
+    let nickname = "", currentQ = 0, userAnswers = [], leaderboard = JSON.parse(localStorage.getItem('iq_leaderboard')||'[]');
 
     document.getElementById('nicknameForm').onsubmit = function(e){
       e.preventDefault();
@@ -248,13 +267,13 @@
     function startTest() {
       document.getElementById('nicknameForm').style.display = "none";
       document.getElementById('progressBarBg').style.display = "";
-      currentQ = 0; userAnswers = []; rawScore = 0;
+      currentQ = 0; userAnswers = [];
       showQuestion();
       updateStreakBadge();
     }
     function showQuestion() {
       document.getElementById('leaderboardBox').hidden = true;
-      let pct = ((currentQ)/questions.length)*100;
+      let pct = (currentQ / questions.length) * 100;
       document.getElementById('progressBar').style.width = pct+"%";
       const q = questions[currentQ];
       let html = `<div class="question">${currentQ+1}. ${q.q}</div><div class="answers">`;
@@ -274,12 +293,11 @@
       const btns = document.querySelectorAll('.answer-btn');
       btns.forEach((btn,idx) => btn.classList.toggle('selected', idx===i));
       document.getElementById('nextBtn').disabled = false;
-      // Show feedback
       btns.forEach((btn,idx)=>{
         btn.classList.remove('correct','wrong');
-        if(idx===i){ btn.classList.add(i===questions[currentQ].answer?'correct':'wrong'); }
+        if(idx === i){ btn.classList.add(i === questions[currentQ].answer ? 'correct' : 'wrong'); }
       });
-      setTimeout(()=>{btns.forEach(btn=>btn.classList.remove('correct','wrong'));},550);
+      setTimeout(()=>{btns.forEach(btn=>btn.classList.remove('correct','wrong'));},500);
     };
     window.nextQ = function() {
       if(userAnswers[currentQ]===undefined){
@@ -294,14 +312,13 @@
     };
 
     function calculateIQ(raw, max) {
-      const percent = raw/max;
+      const percent = raw / max;
       let iq = Math.round(100 + (percent - 0.5) * 2 * 30 + (Math.random()-0.5)*3);
       return Math.max(80, Math.min(145, iq));
     }
     function showResult() {
       const maxScore = questions.reduce((acc, q) => acc + q.diff, 0);
       let raw = 0; userAnswers.forEach((ans, i) => { if(ans===questions[i].answer) raw+=questions[i].diff; });
-      rawScore = raw;
       const iq = calculateIQ(raw, maxScore);
       const correctCount = userAnswers.filter((a, i) => a === questions[i].answer).length;
       const band = iq < 90 ? "Low" : iq < 100 ? "Below Average" : iq < 115 ? "Average" : iq < 130 ? "Above Average" : "High";
@@ -364,7 +381,7 @@
       document.getElementById('leaderboardBox').hidden = false;
       let html = '';
       leaderboard.forEach((e, idx) => {
-        const highlight = (e.name===name && e.score===iq) ? 'leaderboard-your' : '';
+        const highlight = (e.name === name && e.score === iq) ? 'leaderboard-your' : '';
         const dt = new Date(e.timestamp);
         const dateString = dt.toLocaleDateString(undefined, {month:'short',day:'numeric',year:'2-digit'});
         html += `<li class="${highlight}">${idx+1}. <strong>${e.name}</strong> <span>${e.score} IQ <small>(${dateString})</small></span></li>`;
@@ -418,6 +435,7 @@
       if(savedName) { nickname = savedName; document.getElementById('nicknameInput').value = nickname; document.getElementById('nicknameForm').style.display="none"; document.getElementById('progressBarBg').style.display=""; startTest();}
       if(leaderboard.length) renderLeaderboard();
       updateStreakBadge();
+      updateVisitorCount();
     });
     window.restartTest = function() {
       document.getElementById('nicknameForm').style.display = "block";
